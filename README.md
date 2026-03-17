@@ -1,8 +1,8 @@
 # Forge Frontend
 
-React UI za Forge platformu.
+React UI for the Forge platform.
 
-## Tehnologije
+## Tech Stack
 
 - React 18
 - TypeScript
@@ -11,21 +11,21 @@ React UI za Forge platformu.
 - TanStack Query 5 (server state)
 - Zustand 4 (client state)
 - React Router 7
-- Recharts (grafikoni)
-- XYFlow (workflow vizualizacija)
+- Recharts (charts)
+- XYFlow (workflow visualization)
 - Monaco Editor (code editor)
 - XTerm (terminal)
 
-## Struktura
+## Structure
 
 ```
 src/
-├── api/          # TanStack Query hookovi (23 resursa)
-├── components/   # UI komponente (primitivi + slozene)
-├── pages/        # 40+ stranica (CRUD pattern)
-├── hooks/        # Custom React hookovi
+├── api/          # TanStack Query hooks (23 resources)
+├── components/   # UI components (primitives + complex)
+├── pages/        # 40+ pages (CRUD pattern)
+├── hooks/        # Custom React hooks
 ├── stores/       # Zustand stores (auth, theme)
-├── lib/          # Utility funkcije
+├── lib/          # Utility functions
 ├── locales/      # i18n (en.json)
 └── test/         # Test setup
 ```
@@ -33,16 +33,16 @@ src/
 ## Development
 
 ```bash
-# Instalacija zavisnosti
+# Install dependencies
 npm install
 
 # Development server
 npm run dev
 
-# Build za produkciju
+# Production build
 npm run build
 
-# Testovi
+# Tests
 npm run test
 
 # Type checking
@@ -52,15 +52,15 @@ npx tsc --noEmit
 npm run lint
 ```
 
-## Konfiguracija
+## Configuration
 
-API URL se podesava kroz environment varijablu:
+The API URL is configured via an environment variable:
 
 ```bash
 VITE_API_URL=https://forge.example.com
 ```
 
-## Dokumentacija
+## Documentation
 
 - [Frontend React Architecture](docs/03-frontend-react.md)
 
@@ -70,9 +70,9 @@ VITE_API_URL=https://forge.example.com
 docker build -t krlex/forge-frontend:latest .
 ```
 
-Build generise staticke fajlove u `dist/` koji se serviraju preko Nginx-a.
+The build generates static files in `dist/` which are served via Nginx.
 
-## Povezani repozitorijumi
+## Related Repositories
 
-- [forge-backend](https://github.com/forgeplatform/forge-backend) — Django API
-- [forge-deploy](https://github.com/forgeplatform/forge-deploy) — Docker Compose, Nginx, CI/CD
+- [forge-backend](https://git.cloudforyour.work/forge-platform/forge-backend) — Django API
+- [forge-devops](https://git.cloudforyour.work/forge-platform/forge-devops) — Docker Compose, Nginx, CI/CD
