@@ -67,7 +67,7 @@ VITE_API_URL=https://forge.example.com
 ## Docker
 
 ```bash
-docker build -t krlex/forge-frontend:latest .
+docker build -t registry.cloudforyour.work/forge-platform/forge-frontend:latest .
 ```
 
 The build generates static files in `dist/` which are served via Nginx.
