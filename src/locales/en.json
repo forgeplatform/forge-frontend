@@ -40,6 +40,7 @@
     "jobs": "Jobs",
     "schedules": "Schedules",
     "activity": "Activity",
+    "audit": "Audit Log",
     "templates": "Templates",
     "inventories": "Inventories",
     "hosts": "Hosts",

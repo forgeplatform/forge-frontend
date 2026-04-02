@@ -21,6 +21,7 @@ import {
   Container,
   Network,
   Bell,
+  ShieldCheck,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -45,6 +46,7 @@ const navigation: NavGroup[] = [
       { labelKey: 'nav.jobs', path: '/jobs', icon: Play },
       { labelKey: 'nav.schedules', path: '/schedules', icon: Clock },
       { labelKey: 'nav.activity', path: '/activity', icon: Activity },
+      { labelKey: 'nav.audit', path: '/audit', icon: ShieldCheck },
     ],
   },
   {

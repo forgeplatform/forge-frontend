@@ -452,9 +452,34 @@ export interface ActivityStreamEntry {
   changes: Record<string, unknown>
   object1: string
   object2: string
+  actor_ip?: string
+  actor_user_agent?: string
+  actor_session_id?: string
   summary_fields: {
     actor?: { id: number; username: string }
   }
+}
+
+// --- Audit Events ---
+
+export interface AuditEvent {
+  id: number
+  timestamp: string
+  actor: number | null
+  actor_username: string
+  actor_ip: string | null
+  actor_user_agent: string
+  actor_session_id: string
+  category: 'auth' | 'credential_access' | 'permission_change' | 'resource_change' | 'system'
+  severity: 'info' | 'warning' | 'critical'
+  action: string
+  description: string
+  resource_type: string
+  resource_id: number | null
+  resource_name: string
+  action_node: string
+  detail: Record<string, unknown>
+  organization: number | null
 }
 
 // --- Schedules ---

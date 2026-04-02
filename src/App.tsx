@@ -25,6 +25,7 @@ import { HostDetail } from '@/pages/HostDetail'
 import { Schedules } from '@/pages/Schedules'
 import { ScheduleDetail } from '@/pages/ScheduleDetail'
 import { ActivityStream } from '@/pages/ActivityStream'
+import { AuditLog } from '@/pages/AuditLog'
 import { JobTemplateForm } from '@/pages/JobTemplateForm'
 import { ProjectForm } from '@/pages/ProjectForm'
 import { InventoryForm } from '@/pages/InventoryForm'
@@ -124,6 +125,7 @@ function AuthenticatedRoutes() {
         <Route path="/notification_templates/:id" element={<NotificationTemplateDetail />} />
         <Route path="/topology" element={<TopologyPage />} />
         <Route path="/activity" element={<ActivityStream />} />
+        <Route path="/audit" element={<AuditLog />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/settings/:slug" element={<SettingsCategory />} />
 
