@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { useMe } from '@/api/hooks/useAuth'
 import { useThemeStore } from '@/stores/theme'
 import { AppLayout } from '@/components/layout/AppLayout'
+import { AssistantPanel } from '@/components/assistant/AssistantPanel'
 import { Login } from '@/pages/Login'
 import { Dashboard } from '@/pages/Dashboard'
 import { Jobs } from '@/pages/Jobs'
@@ -131,6 +132,7 @@ function AuthenticatedRoutes() {
 
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <AssistantPanel />
     </AppLayout>
   )
 }
