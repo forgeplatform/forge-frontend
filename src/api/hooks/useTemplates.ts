@@ -163,8 +163,8 @@ export function useProjectPlaybooks(projectId: string | undefined) {
 
 // --- Survey ---
 
-import type { SurveySpec } from '@/components/survey/SurveyEditor'
-export type { SurveySpec }
+import type { SurveySpec, DynamicChoicesConfig } from '@/components/survey/SurveyEditor'
+export type { SurveySpec, DynamicChoicesConfig }
 
 export function useJobTemplateSurvey(id: string) {
   return useQuery<SurveySpec>({
@@ -188,6 +188,27 @@ export function useSaveJobTemplateSurvey(id: string) {
       toast.success('Survey saved')
       queryClient.invalidateQueries({ queryKey: ['job_template_survey', id] })
       queryClient.invalidateQueries({ queryKey: ['job_template', id] })
+    },
+  })
+}
+
+export interface DynamicChoicesResult {
+  [variable: string]: {
+    choices: string[]
+    source_type: string
+  }
+}
+
+export function useResolveDynamicChoices(id: string) {
+  return useMutation<DynamicChoicesResult, Error, string[] | undefined>({
+    mutationFn: async (variables) => {
+      const payload: Record<string, unknown> = {}
+      if (variables) payload.variables = variables
+      const { data } = await api.post<DynamicChoicesResult>(
+        `/job_templates/${id}/survey_spec/dynamic_choices/`,
+        payload,
+      )
+      return data
     },
   })
 }

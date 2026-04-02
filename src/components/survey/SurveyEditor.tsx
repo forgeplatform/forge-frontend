@@ -15,6 +15,27 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog'
 
+export interface DynamicChoicesConfig {
+  enabled: boolean
+  source_type?: 'db_query' | 'api_endpoint' | 'jinja2'
+  // db_query
+  model?: string
+  field?: string
+  filter?: Record<string, unknown>
+  // api_endpoint
+  url?: string
+  method?: string
+  headers?: Record<string, string>
+  json_path?: string
+  value_field?: string
+  timeout?: number
+  body?: Record<string, unknown>
+  // jinja2
+  template?: string
+  // common
+  cache_ttl?: number
+}
+
 export interface SurveyQuestion {
   variable: string
   question_name: string
@@ -26,6 +47,7 @@ export interface SurveyQuestion {
   min: number | null
   max: number | null
   new_question: boolean
+  dynamic_choices?: DynamicChoicesConfig
 }
 
 export interface SurveySpec {
@@ -43,6 +65,37 @@ const TYPE_OPTIONS = [
   { value: 'multiplechoice', label: 'Multiple Choice' },
   { value: 'multiselect', label: 'Multi-select' },
 ]
+
+const DB_MODEL_OPTIONS = [
+  { value: 'hosts', label: 'Hosts' },
+  { value: 'groups', label: 'Groups' },
+  { value: 'projects', label: 'Projects' },
+  { value: 'inventories', label: 'Inventories' },
+  { value: 'credentials', label: 'Credentials' },
+  { value: 'organizations', label: 'Organizations' },
+  { value: 'execution_environments', label: 'Execution Environments' },
+  { value: 'templates', label: 'Job Templates' },
+]
+
+const DB_FIELD_OPTIONS = [
+  { value: 'name', label: 'Name' },
+  { value: 'id', label: 'ID' },
+  { value: 'description', label: 'Description' },
+]
+
+const SOURCE_TYPE_OPTIONS = [
+  { value: 'db_query', label: 'Database Query' },
+  { value: 'api_endpoint', label: 'External API' },
+  { value: 'jinja2', label: 'Jinja2 Template' },
+]
+
+const emptyDynamicChoices: DynamicChoicesConfig = {
+  enabled: false,
+  source_type: 'db_query',
+  model: 'hosts',
+  field: 'name',
+  cache_ttl: 60,
+}
 
 const emptyQuestion: SurveyQuestion = {
   variable: '',
@@ -143,6 +196,9 @@ export function SurveyEditor({ value, onChange }: SurveyEditorProps) {
                   <div className="flex items-center gap-2">
                     <span className="font-medium text-sm truncate">{q.question_name || q.variable}</span>
                     <span className="text-xs text-muted-foreground rounded bg-muted px-1.5 py-0.5">{q.type}</span>
+                    {q.dynamic_choices?.enabled && (
+                      <span className="text-xs text-blue-600 rounded bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 px-1.5 py-0.5">dynamic</span>
+                    )}
                     {q.required && <span className="text-xs text-destructive">*</span>}
                   </div>
                   <div className="text-xs text-muted-foreground font-mono">${'{'}{ q.variable }{'}'}</div>
@@ -198,10 +254,145 @@ export function SurveyEditor({ value, onChange }: SurveyEditorProps) {
               )}
             </div>
             {(draft.type === 'multiplechoice' || draft.type === 'multiselect') && (
-              <div className="space-y-2">
-                <Label>Choices (one per line)</Label>
-                <Textarea value={draft.choices} onChange={(e) => setDraft({ ...draft, choices: e.target.value })} rows={4} placeholder={"Option A\nOption B\nOption C"} />
-              </div>
+              <>
+                {/* Dynamic Choices Toggle */}
+                <div className="flex items-center gap-2 pt-2 border-t">
+                  <Switch
+                    checked={draft.dynamic_choices?.enabled ?? false}
+                    onCheckedChange={(v) => setDraft({
+                      ...draft,
+                      dynamic_choices: v
+                        ? { ...emptyDynamicChoices, ...(draft.dynamic_choices || {}), enabled: true }
+                        : { ...emptyDynamicChoices, ...(draft.dynamic_choices || {}), enabled: false },
+                    })}
+                  />
+                  <Label>Dynamic Choices</Label>
+                  <span className="text-xs text-muted-foreground">(populate at launch time)</span>
+                </div>
+
+                {draft.dynamic_choices?.enabled ? (
+                  <div className="space-y-3 rounded-md border p-3 bg-muted/30">
+                    <div className="space-y-2">
+                      <Label>Source Type</Label>
+                      <Select
+                        value={draft.dynamic_choices.source_type ?? 'db_query'}
+                        onChange={(e) => setDraft({
+                          ...draft,
+                          dynamic_choices: { ...draft.dynamic_choices!, source_type: e.target.value as DynamicChoicesConfig['source_type'] },
+                        })}
+                        options={SOURCE_TYPE_OPTIONS}
+                      />
+                    </div>
+
+                    {draft.dynamic_choices.source_type === 'db_query' && (
+                      <div className="grid gap-3 md:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label>Model</Label>
+                          <Select
+                            value={draft.dynamic_choices.model ?? 'hosts'}
+                            onChange={(e) => setDraft({
+                              ...draft,
+                              dynamic_choices: { ...draft.dynamic_choices!, model: e.target.value },
+                            })}
+                            options={DB_MODEL_OPTIONS}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Field</Label>
+                          <Select
+                            value={draft.dynamic_choices.field ?? 'name'}
+                            onChange={(e) => setDraft({
+                              ...draft,
+                              dynamic_choices: { ...draft.dynamic_choices!, field: e.target.value },
+                            })}
+                            options={DB_FIELD_OPTIONS}
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {draft.dynamic_choices.source_type === 'api_endpoint' && (
+                      <div className="space-y-3">
+                        <div className="space-y-2">
+                          <Label>URL</Label>
+                          <Input
+                            value={draft.dynamic_choices.url ?? ''}
+                            onChange={(e) => setDraft({
+                              ...draft,
+                              dynamic_choices: { ...draft.dynamic_choices!, url: e.target.value },
+                            })}
+                            placeholder="https://api.example.com/options"
+                            className="font-mono text-sm"
+                          />
+                        </div>
+                        <div className="grid gap-3 md:grid-cols-2">
+                          <div className="space-y-2">
+                            <Label>JSON Path</Label>
+                            <Input
+                              value={draft.dynamic_choices.json_path ?? ''}
+                              onChange={(e) => setDraft({
+                                ...draft,
+                                dynamic_choices: { ...draft.dynamic_choices!, json_path: e.target.value },
+                              })}
+                              placeholder="data.items"
+                              className="font-mono text-sm"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label>Value Field</Label>
+                            <Input
+                              value={draft.dynamic_choices.value_field ?? ''}
+                              onChange={(e) => setDraft({
+                                ...draft,
+                                dynamic_choices: { ...draft.dynamic_choices!, value_field: e.target.value },
+                              })}
+                              placeholder="name"
+                              className="font-mono text-sm"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {draft.dynamic_choices.source_type === 'jinja2' && (
+                      <div className="space-y-2">
+                        <Label>Jinja2 Template</Label>
+                        <Textarea
+                          value={draft.dynamic_choices.template ?? ''}
+                          onChange={(e) => setDraft({
+                            ...draft,
+                            dynamic_choices: { ...draft.dynamic_choices!, template: e.target.value },
+                          })}
+                          rows={3}
+                          placeholder={'{{ hosts | tojson }}'}
+                          className="font-mono text-sm"
+                        />
+                        <p className="text-xs text-muted-foreground">
+                          Available variables: hosts, groups (from template inventory). Must output a JSON array.
+                        </p>
+                      </div>
+                    )}
+
+                    <div className="space-y-2">
+                      <Label>Cache TTL (seconds)</Label>
+                      <Input
+                        type="number"
+                        min="0"
+                        value={draft.dynamic_choices.cache_ttl ?? 60}
+                        onChange={(e) => setDraft({
+                          ...draft,
+                          dynamic_choices: { ...draft.dynamic_choices!, cache_ttl: Number(e.target.value) },
+                        })}
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <Label>Choices (one per line)</Label>
+                    <Textarea value={draft.choices} onChange={(e) => setDraft({ ...draft, choices: e.target.value })} rows={4} placeholder={"Option A\nOption B\nOption C"} />
+                  </div>
+                )}
+              </>
             )}
             {(draft.type === 'integer' || draft.type === 'float' || draft.type === 'text' || draft.type === 'textarea') && (
               <div className="grid gap-4 md:grid-cols-2">

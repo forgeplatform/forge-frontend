@@ -171,10 +171,10 @@ Each page corresponds to one route. They follow the pattern:
 
 | Component | What it does | When it's used |
 |-----------|-------------|----------------|
-| `LaunchDialog` | Override template parameters at launch | When template has `ask_*_on_launch` flags |
+| `LaunchDialog` | Override template parameters at launch + render survey questions with dynamic choices | When template has `ask_*_on_launch` flags or `survey_enabled` |
 | `WorkflowVisualizer` | XYFlow DAG editor | Workflow template creation/editing |
 | `RRuleEditor` | Visual builder for iCal recurrence | Schedule creation/editing |
-| `SurveyEditor` | CRUD for survey questions | Template survey definition |
+| `SurveyEditor` | CRUD for survey questions with dynamic choices configuration | Template survey definition |
 | `CodeEditor` | Monaco editor (lazy-loaded) | Extra vars, variables editing |
 | `RBACPanel` | Role assignment UI | Assigning permissions to users/teams |
 
