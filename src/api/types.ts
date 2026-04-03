@@ -700,3 +700,136 @@ export interface ExecutionEnvironment {
     credential?: { id: number; name: string }
   }
 }
+
+// --- Event-Driven Automation (EDA) ---
+
+export type EventRuleSourceType =
+  | 'webhook_generic'
+  | 'webhook_github'
+  | 'webhook_gitlab'
+  | 'alertmanager'
+  | 'pagerduty'
+  | 'datadog'
+  | 'cloudwatch'
+
+export type EventRuleActionType =
+  | 'launch_job_template'
+  | 'launch_workflow'
+  | 'send_notification'
+
+export interface EventRuleCondition {
+  jinja2_expression: string
+  description?: string
+}
+
+export interface EventRuleAction {
+  action_type: EventRuleActionType
+  target_id: number
+  extra_vars?: Record<string, unknown>
+  description?: string
+}
+
+export interface EventRule {
+  id: number
+  type: 'event_rule'
+  url: string
+  related: {
+    organization?: string
+    event_logs?: string
+    webhook_key?: string
+  }
+  name: string
+  description: string
+  organization: number | null
+  enabled: boolean
+  source_type: EventRuleSourceType
+  webhook_path: string
+  conditions: EventRuleCondition[]
+  actions: EventRuleAction[]
+  throttle_seconds: number
+  last_fired_at: string | null
+  fire_count: number
+  webhook_url: string
+  created: string
+  modified: string
+}
+
+export type EventLogStatus =
+  | 'received'
+  | 'matched'
+  | 'unmatched'
+  | 'throttled'
+  | 'action_fired'
+  | 'action_failed'
+  | 'error'
+  | 'signature_failed'
+
+export interface EventLog {
+  id: number
+  type: 'event_log'
+  url: string
+  related: {
+    event_rule?: string
+    job?: string
+    organization?: string
+  }
+  created: string
+  event_rule: number | null
+  event_rule_name: string
+  source_type: string
+  source_ip: string | null
+  event_type: string
+  event_guid: string
+  payload: Record<string, unknown>
+  headers: Record<string, string>
+  conditions_matched: boolean
+  condition_results: Array<{
+    expression: string
+    description: string
+    matched: boolean
+    error?: string
+  }>
+  actions_triggered: Array<{
+    action_type: string
+    target_id: number
+    description: string
+    status: string
+    job_id?: number
+    error?: string
+  }>
+  status: EventLogStatus
+  error_detail: string
+  job_id: number | null
+  organization: number | null
+}
+
+export type OutboundWebhookEventType =
+  | 'job.started'
+  | 'job.succeeded'
+  | 'job.failed'
+  | 'job.canceled'
+  | 'workflow.started'
+  | 'workflow.succeeded'
+  | 'workflow.failed'
+
+export interface OutboundWebhook {
+  id: number
+  type: 'outbound_webhook'
+  url: string
+  related: {
+    organization?: string
+  }
+  name: string
+  description: string
+  organization: number | null
+  target_url: string
+  events: OutboundWebhookEventType[]
+  custom_headers: Record<string, string>
+  enabled: boolean
+  ssl_verify: boolean
+  last_status: string
+  last_sent_at: string | null
+  last_error: string
+  created: string
+  modified: string
+}

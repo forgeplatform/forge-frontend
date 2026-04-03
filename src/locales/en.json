@@ -54,6 +54,10 @@
     "execution_env": "Execution Env",
     "notifications": "Notifications",
     "topology": "Topology",
-    "settings": "Settings"
+    "settings": "Settings",
+    "automation": "Automation",
+    "event_rules": "Event Rules",
+    "event_logs": "Event Logs",
+    "outbound_webhooks": "Outbound Webhooks"
   }
 }

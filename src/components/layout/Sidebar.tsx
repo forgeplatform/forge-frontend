@@ -22,6 +22,9 @@ import {
   Network,
   Bell,
   ShieldCheck,
+  Zap,
+  ScrollText,
+  Webhook,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -47,6 +50,14 @@ const navigation: NavGroup[] = [
       { labelKey: 'nav.schedules', path: '/schedules', icon: Clock },
       { labelKey: 'nav.activity', path: '/activity', icon: Activity },
       { labelKey: 'nav.audit', path: '/audit', icon: ShieldCheck },
+    ],
+  },
+  {
+    titleKey: 'nav.automation',
+    items: [
+      { labelKey: 'nav.event_rules', path: '/event_rules', icon: Zap },
+      { labelKey: 'nav.event_logs', path: '/event_logs', icon: ScrollText },
+      { labelKey: 'nav.outbound_webhooks', path: '/outbound_webhooks', icon: Webhook },
     ],
   },
   {

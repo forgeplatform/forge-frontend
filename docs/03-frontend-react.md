@@ -223,6 +223,14 @@ The theme is stored in localStorage under the key `forge-theme`.
 /settings                       Settings (categories)
 /settings/:slug                 Settings detail
 /activity                       Activity stream (audit log)
+/audit                          Audit log (immutable security events)
+
+# Event-Driven Automation
+/event_rules                    Event rules list (+ /new, /:id, /:id/edit)
+/event_logs                     Event logs (webhook receive history)
+/event_logs/:id                 Event log detail (payload, conditions, actions)
+/outbound_webhooks              Outbound webhooks (+ /new, /:id, /:id/edit)
+
 *                               404 Not Found
 ```
 

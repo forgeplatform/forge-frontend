@@ -51,6 +51,14 @@ import { ScheduleForm } from '@/pages/ScheduleForm'
 import { WorkflowTemplateDetail } from '@/pages/WorkflowTemplateDetail'
 import { TopologyPage } from '@/pages/TopologyPage'
 import { ForcePasswordChange } from '@/pages/ForcePasswordChange'
+import { EventRules } from '@/pages/EventRules'
+import { EventRuleDetail } from '@/pages/EventRuleDetail'
+import { EventRuleForm } from '@/pages/EventRuleForm'
+import { EventLogs } from '@/pages/EventLogs'
+import { EventLogDetail } from '@/pages/EventLogDetail'
+import { OutboundWebhooks } from '@/pages/OutboundWebhooks'
+import { OutboundWebhookDetail } from '@/pages/OutboundWebhookDetail'
+import { OutboundWebhookForm } from '@/pages/OutboundWebhookForm'
 import { useEffect } from 'react'
 
 function AuthenticatedRoutes() {
@@ -127,6 +135,18 @@ function AuthenticatedRoutes() {
         <Route path="/topology" element={<TopologyPage />} />
         <Route path="/activity" element={<ActivityStream />} />
         <Route path="/audit" element={<AuditLog />} />
+
+        {/* Event-Driven Automation */}
+        <Route path="/event_rules" element={<EventRules />} />
+        <Route path="/event_rules/new" element={<EventRuleForm />} />
+        <Route path="/event_rules/:id/edit" element={<EventRuleForm />} />
+        <Route path="/event_rules/:id" element={<EventRuleDetail />} />
+        <Route path="/event_logs" element={<EventLogs />} />
+        <Route path="/event_logs/:id" element={<EventLogDetail />} />
+        <Route path="/outbound_webhooks" element={<OutboundWebhooks />} />
+        <Route path="/outbound_webhooks/new" element={<OutboundWebhookForm />} />
+        <Route path="/outbound_webhooks/:id/edit" element={<OutboundWebhookForm />} />
+        <Route path="/outbound_webhooks/:id" element={<OutboundWebhookDetail />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/settings/:slug" element={<SettingsCategory />} />
 
