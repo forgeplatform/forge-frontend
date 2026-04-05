@@ -175,6 +175,7 @@ Each page corresponds to one route. They follow the pattern:
 | `WorkflowVisualizer` | XYFlow DAG editor | Workflow template creation/editing |
 | `RRuleEditor` | Visual builder for iCal recurrence | Schedule creation/editing |
 | `SurveyEditor` | CRUD for survey questions with dynamic choices configuration | Template survey definition |
+| `WorkflowLaunchDialog` | Multi-step launch dialog for workflows with per-node surveys | Workflow launch when surveys are enabled |
 | `CodeEditor` | Monaco editor (lazy-loaded) | Extra vars, variables editing |
 | `RBACPanel` | Role assignment UI | Assigning permissions to users/teams |
 | `AuditLog` | Immutable security audit log with filters, expandable rows, CSV export | `/audit` route — credential access, auth events, permission changes |

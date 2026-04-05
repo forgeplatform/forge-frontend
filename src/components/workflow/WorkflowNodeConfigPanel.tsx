@@ -23,12 +23,14 @@ export function WorkflowNodeConfigPanel({ node, onClose }: WorkflowNodeConfigPan
   const [extraData, setExtraData] = useState(
     node.extra_data ? JSON.stringify(node.extra_data, null, 2) : '{}',
   )
+  const [surveyEnabled, setSurveyEnabled] = useState(node.survey_enabled ?? false)
 
   useEffect(() => {
     setConverge(node.all_parents_must_converge)
     setLimit(node.limit ?? '')
     setVerbosity(node.verbosity != null ? String(node.verbosity) : '')
     setExtraData(node.extra_data ? JSON.stringify(node.extra_data, null, 2) : '{}')
+    setSurveyEnabled(node.survey_enabled ?? false)
   }, [node])
 
   const handleSave = () => {
@@ -37,6 +39,7 @@ export function WorkflowNodeConfigPanel({ node, onClose }: WorkflowNodeConfigPan
       limit,
     }
     if (verbosity) payload.verbosity = Number(verbosity)
+    payload.survey_enabled = surveyEnabled
     try {
       payload.extra_data = JSON.parse(extraData)
     } catch {
@@ -82,6 +85,16 @@ export function WorkflowNodeConfigPanel({ node, onClose }: WorkflowNodeConfigPan
           <Label>Verbosity</Label>
           <Input type="number" min={0} max={5} value={verbosity} onChange={(e) => setVerbosity(e.target.value)} />
         </div>
+
+        <div className="flex items-center gap-2">
+          <Switch checked={surveyEnabled} onCheckedChange={setSurveyEnabled} />
+          <Label className="text-sm">Node Survey</Label>
+        </div>
+        {surveyEnabled && (
+          <p className="text-xs text-muted-foreground">
+            Survey enabled. Edit survey spec via the API: PATCH /api/v2/workflow_job_template_nodes/{node.id}/survey_spec/
+          </p>
+        )}
 
         <div className="space-y-2">
           <Label>Extra Data (JSON)</Label>

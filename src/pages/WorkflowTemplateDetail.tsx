@@ -15,6 +15,7 @@ import { useWorkflowNodes } from '@/api/hooks/useWorkflowNodes'
 import { WorkflowVisualizer } from '@/components/workflow/WorkflowVisualizer'
 import { WorkflowNodeConfigPanel } from '@/components/workflow/WorkflowNodeConfigPanel'
 import { CopyDialog } from '@/components/CopyDialog'
+import { WorkflowLaunchDialog } from '@/components/WorkflowLaunchDialog'
 import { useCopyResource } from '@/api/hooks/useCopy'
 import { SchedulesTab } from '@/components/SchedulesTab'
 import { NotificationAssociations } from '@/components/NotificationAssociations'
@@ -27,6 +28,7 @@ export function WorkflowTemplateDetail() {
   const navigate = useNavigate()
   const [showDelete, setShowDelete] = useState(false)
   const [showCopy, setShowCopy] = useState(false)
+  const [showLaunch, setShowLaunch] = useState(false)
   const [selectedNode, setSelectedNode] = useState<WorkflowNode | null>(null)
 
   const { data: template, isLoading } = useWorkflowJobTemplateDetail(id!)
@@ -35,9 +37,26 @@ export function WorkflowTemplateDetail() {
   const copyMutation = useCopyResource('workflow_job_templates', id!)
   const { data: nodesData } = useWorkflowNodes(id!)
 
+  const hasNodeSurveys = nodesData?.results?.some(n => n.survey_enabled) ?? false
+  const needsDialog = template?.survey_enabled || hasNodeSurveys ||
+    template?.ask_variables_on_launch || template?.ask_inventory_on_launch
+
   const handleLaunch = () => {
-    launch.mutate(undefined, {
-      onSuccess: (data) => navigate(`/jobs/${data.id}`),
+    if (needsDialog) {
+      setShowLaunch(true)
+    } else {
+      launch.mutate(undefined, {
+        onSuccess: (data) => navigate(`/jobs/${data.id}`),
+      })
+    }
+  }
+
+  const handleDialogLaunch = (payload: Record<string, unknown>) => {
+    launch.mutate(payload, {
+      onSuccess: (data) => {
+        setShowLaunch(false)
+        navigate(`/jobs/${data.id}`)
+      },
     })
   }
 
@@ -212,6 +231,16 @@ export function WorkflowTemplateDetail() {
           })
         }}
       />
+
+      {template && (
+        <WorkflowLaunchDialog
+          open={showLaunch}
+          onOpenChange={setShowLaunch}
+          template={template}
+          isPending={launch.isPending}
+          onLaunch={handleDialogLaunch}
+        />
+      )}
     </div>
   )
 }

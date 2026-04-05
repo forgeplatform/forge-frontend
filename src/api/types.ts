@@ -539,6 +539,8 @@ export interface WorkflowNode {
   job_type: string
   limit: string
   verbosity: number | null
+  survey_enabled: boolean
+  survey_spec: Record<string, unknown>
   summary_fields: {
     unified_job_template?: { id: number; name: string; unified_job_type: string }
     workflow_job_template: { id: number; name: string }
@@ -555,6 +557,29 @@ export interface WorkflowNodePayload {
   job_type?: string
   limit?: string
   verbosity?: number | null
+  survey_enabled?: boolean
+  survey_spec?: Record<string, unknown>
+}
+
+export interface WorkflowNodeSurveyInfo {
+  node_id: number
+  identifier: string
+  node_name: string
+  survey_spec: {
+    name?: string
+    description?: string
+    spec: Array<{
+      variable: string
+      question_name: string
+      question_description: string
+      type: string
+      required: boolean
+      default: string
+      choices: string
+      min: number | null
+      max: number | null
+    }>
+  }
 }
 
 // --- Receptor / Topology ---
