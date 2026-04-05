@@ -25,6 +25,10 @@ import {
   Zap,
   ScrollText,
   Webhook,
+  GitCompare,
+  AlertTriangle,
+  ShieldAlert,
+  Camera,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -58,6 +62,15 @@ const navigation: NavGroup[] = [
       { labelKey: 'nav.event_rules', path: '/event_rules', icon: Zap },
       { labelKey: 'nav.event_logs', path: '/event_logs', icon: ScrollText },
       { labelKey: 'nav.outbound_webhooks', path: '/outbound_webhooks', icon: Webhook },
+    ],
+  },
+  {
+    titleKey: 'nav.compliance',
+    items: [
+      { labelKey: 'nav.drift_detections', path: '/drift_detections', icon: GitCompare },
+      { labelKey: 'nav.drift_alerts', path: '/drift_alerts', icon: AlertTriangle },
+      { labelKey: 'nav.drift_alert_rules', path: '/drift_alert_rules', icon: ShieldAlert },
+      { labelKey: 'nav.fact_snapshots', path: '/fact_snapshots', icon: Camera },
     ],
   },
   {

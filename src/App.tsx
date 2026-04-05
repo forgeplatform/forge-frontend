@@ -59,6 +59,14 @@ import { EventLogDetail } from '@/pages/EventLogDetail'
 import { OutboundWebhooks } from '@/pages/OutboundWebhooks'
 import { OutboundWebhookDetail } from '@/pages/OutboundWebhookDetail'
 import { OutboundWebhookForm } from '@/pages/OutboundWebhookForm'
+import { DriftDetections } from '@/pages/DriftDetections'
+import { DriftDetectionDetail } from '@/pages/DriftDetectionDetail'
+import { DriftAlertRules } from '@/pages/DriftAlertRules'
+import { DriftAlertRuleDetail } from '@/pages/DriftAlertRuleDetail'
+import { DriftAlertRuleForm } from '@/pages/DriftAlertRuleForm'
+import { DriftAlerts } from '@/pages/DriftAlerts'
+import { DriftAlertDetail } from '@/pages/DriftAlertDetail'
+import { FactSnapshots } from '@/pages/FactSnapshots'
 import { useEffect } from 'react'
 
 function AuthenticatedRoutes() {
@@ -147,6 +155,18 @@ function AuthenticatedRoutes() {
         <Route path="/outbound_webhooks/new" element={<OutboundWebhookForm />} />
         <Route path="/outbound_webhooks/:id/edit" element={<OutboundWebhookForm />} />
         <Route path="/outbound_webhooks/:id" element={<OutboundWebhookDetail />} />
+
+        {/* Drift Detection */}
+        <Route path="/drift_detections" element={<DriftDetections />} />
+        <Route path="/drift_detections/:id" element={<DriftDetectionDetail />} />
+        <Route path="/drift_alert_rules" element={<DriftAlertRules />} />
+        <Route path="/drift_alert_rules/new" element={<DriftAlertRuleForm />} />
+        <Route path="/drift_alert_rules/:id/edit" element={<DriftAlertRuleForm />} />
+        <Route path="/drift_alert_rules/:id" element={<DriftAlertRuleDetail />} />
+        <Route path="/drift_alerts" element={<DriftAlerts />} />
+        <Route path="/drift_alerts/:id" element={<DriftAlertDetail />} />
+        <Route path="/fact_snapshots" element={<FactSnapshots />} />
+
         <Route path="/settings" element={<Settings />} />
         <Route path="/settings/:slug" element={<SettingsCategory />} />
 

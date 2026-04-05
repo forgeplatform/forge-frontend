@@ -58,6 +58,11 @@
     "automation": "Automation",
     "event_rules": "Event Rules",
     "event_logs": "Event Logs",
-    "outbound_webhooks": "Outbound Webhooks"
+    "outbound_webhooks": "Outbound Webhooks",
+    "compliance": "Compliance",
+    "drift_detections": "Drift Detections",
+    "drift_alerts": "Drift Alerts",
+    "drift_alert_rules": "Alert Rules",
+    "fact_snapshots": "Fact Snapshots"
   }
 }

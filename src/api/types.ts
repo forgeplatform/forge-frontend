@@ -833,3 +833,112 @@ export interface OutboundWebhook {
   created: string
   modified: string
 }
+
+// --- Drift Detection ---
+
+export type DriftCategory = 'packages' | 'services' | 'users_groups' | 'network' | 'mounts' | 'kernel' | 'other'
+export type DriftSeverity = 'low' | 'medium' | 'high' | 'critical'
+
+export interface HostFactSnapshot {
+  id: number
+  type: 'fact_snapshot'
+  url: string
+  related: {
+    host?: string
+    job?: string
+    inventory?: string
+  }
+  host: number
+  job: number | null
+  inventory: number | null
+  organization: number | null
+  captured_at: string
+  facts: Record<string, unknown>
+  facts_hash: string
+}
+
+export interface DriftDetection {
+  id: number
+  type: 'drift_detection'
+  url: string
+  related: {
+    host?: string
+    job?: string
+    snapshot_before?: string
+    snapshot_after?: string
+  }
+  host: number
+  host_name: string
+  inventory: number | null
+  organization: number | null
+  snapshot_before: number | null
+  snapshot_after: number
+  detected_at: string
+  job: number | null
+  category: DriftCategory
+  severity: DriftSeverity
+  fact_path: string
+  summary: string
+  detail: {
+    before: unknown
+    after: unknown
+    diff_type: 'added' | 'removed' | 'changed'
+  }
+  acknowledged: boolean
+  acknowledged_by: number | null
+  acknowledged_at: string | null
+}
+
+export interface DriftAlertRule {
+  id: number
+  type: 'drift_alert_rule'
+  url: string
+  related: {
+    organization?: string
+    inventory?: string
+    notification_template?: string
+  }
+  name: string
+  description: string
+  organization: number | null
+  enabled: boolean
+  inventory: number | null
+  host_filter: string
+  categories: DriftCategory[]
+  severity_min: DriftSeverity
+  threshold_count: number
+  threshold_window_minutes: number
+  notification_template: number | null
+  last_triggered_at: string | null
+  trigger_count: number
+  cooldown_minutes: number
+  created: string
+  modified: string
+}
+
+export interface DriftAlert {
+  id: number
+  type: 'drift_alert'
+  url: string
+  related: {
+    alert_rule?: string
+    host?: string
+  }
+  created: string
+  alert_rule: number | null
+  alert_rule_name: string
+  host: number | null
+  organization: number | null
+  drift_count: number
+  summary: string
+  notification_status: 'pending' | 'sent' | 'failed'
+  notification_error: string
+}
+
+export interface DriftSummary {
+  total_hosts_with_drift: number
+  total_drift_items: number
+  unacknowledged_count: number
+  by_category: Record<DriftCategory, number>
+  by_severity: Record<DriftSeverity, number>
+}

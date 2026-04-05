@@ -231,6 +231,14 @@ The theme is stored in localStorage under the key `forge-theme`.
 /event_logs/:id                 Event log detail (payload, conditions, actions)
 /outbound_webhooks              Outbound webhooks (+ /new, /:id, /:id/edit)
 
+# Drift Detection (Compliance)
+/drift_detections               Drift list (filter by category, severity, acknowledged)
+/drift_detections/:id           Drift detail (before/after diff, acknowledge)
+/drift_alert_rules              Alert rules list (+ /new, /:id, /:id/edit)
+/drift_alerts                   Triggered alerts (notification status)
+/drift_alerts/:id               Alert detail (summary, notification error)
+/fact_snapshots                 Host fact snapshots (browse by host/job)
+
 *                               404 Not Found
 ```
 
