@@ -942,3 +942,68 @@ export interface DriftSummary {
   by_category: Record<DriftCategory, number>
   by_severity: Record<DriftSeverity, number>
 }
+
+// --- Analytics ---
+
+export interface AnalyticsJobTrend {
+  date: string
+  avg_duration: number
+  job_count: number
+  successful: number
+  failed: number
+}
+
+export interface AnalyticsSuccessRate {
+  date: string
+  total: number
+  successful: number
+  failed: number
+  error: number
+  canceled: number
+  success_rate: number
+}
+
+export interface AnalyticsTopTemplate {
+  template_id: number
+  template_name: string
+  run_count: number
+  avg_duration: number
+  success_rate: number
+}
+
+export interface AnalyticsBusiestHost {
+  host_name: string
+  job_count: number
+  total_ok: number
+  total_changed: number
+  total_failures: number
+  total_skipped: number
+}
+
+export interface AnalyticsHostCoverage {
+  total_hosts: number
+  automated_hosts: number
+  coverage_pct: number
+  by_inventory: Array<{
+    inventory_id: number
+    name: string
+    total: number
+    automated: number
+    pct: number
+  }>
+}
+
+export interface AnalyticsFailureAnalysis {
+  by_template: Array<{ template_name: string; failure_count: number }>
+  by_host: Array<{ host_name: string; failure_count: number }>
+}
+
+export interface AnalyticsTimeSavings {
+  total_automated_seconds: number
+  estimated_manual_seconds: number
+  time_saved_seconds: number
+  time_saved_hours: number
+  job_count: number
+  avg_job_duration: number
+  manual_multiplier: number
+}

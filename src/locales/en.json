@@ -63,6 +63,7 @@
     "drift_detections": "Drift Detections",
     "drift_alerts": "Drift Alerts",
     "drift_alert_rules": "Alert Rules",
-    "fact_snapshots": "Fact Snapshots"
+    "fact_snapshots": "Fact Snapshots",
+    "analytics": "Analytics"
   }
 }

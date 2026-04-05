@@ -67,6 +67,7 @@ import { DriftAlertRuleForm } from '@/pages/DriftAlertRuleForm'
 import { DriftAlerts } from '@/pages/DriftAlerts'
 import { DriftAlertDetail } from '@/pages/DriftAlertDetail'
 import { FactSnapshots } from '@/pages/FactSnapshots'
+import { Analytics } from '@/pages/Analytics'
 import { useEffect } from 'react'
 
 function AuthenticatedRoutes() {
@@ -166,6 +167,9 @@ function AuthenticatedRoutes() {
         <Route path="/drift_alerts" element={<DriftAlerts />} />
         <Route path="/drift_alerts/:id" element={<DriftAlertDetail />} />
         <Route path="/fact_snapshots" element={<FactSnapshots />} />
+
+        {/* Analytics */}
+        <Route path="/analytics" element={<Analytics />} />
 
         <Route path="/settings" element={<Settings />} />
         <Route path="/settings/:slug" element={<SettingsCategory />} />

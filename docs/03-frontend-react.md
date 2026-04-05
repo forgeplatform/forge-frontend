@@ -239,6 +239,9 @@ The theme is stored in localStorage under the key `forge-theme`.
 /drift_alerts/:id               Alert detail (summary, notification error)
 /fact_snapshots                 Host fact snapshots (browse by host/job)
 
+# Analytics
+/analytics                      Automation analytics dashboard (trends, coverage, time savings)
+
 *                               404 Not Found
 ```
 

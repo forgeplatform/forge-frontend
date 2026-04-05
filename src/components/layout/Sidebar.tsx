@@ -29,6 +29,7 @@ import {
   AlertTriangle,
   ShieldAlert,
   Camera,
+  BarChart3,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -54,6 +55,7 @@ const navigation: NavGroup[] = [
       { labelKey: 'nav.schedules', path: '/schedules', icon: Clock },
       { labelKey: 'nav.activity', path: '/activity', icon: Activity },
       { labelKey: 'nav.audit', path: '/audit', icon: ShieldCheck },
+      { labelKey: 'nav.analytics', path: '/analytics', icon: BarChart3 },
     ],
   },
   {
