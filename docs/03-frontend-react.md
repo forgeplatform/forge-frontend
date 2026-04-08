@@ -243,6 +243,15 @@ The theme is stored in localStorage under the key `forge-theme`.
 # Analytics
 /analytics                      Automation analytics dashboard (trends, coverage, time savings)
 
+# Self-Service Portal
+/service_portal                 Catalog browse (cards by category, request dialog)
+/my_requests                    End-user request inbox (status filter)
+/service_requests/:id           Request detail (audit, approve/reject)
+/service_approvals              Approver inbox (filtered to caller's authority)
+/service_catalog                Admin CRUD list of catalog items
+/service_catalog/new            Create catalog item form
+/service_catalog/:id/edit       Edit catalog item form
+
 *                               404 Not Found
 ```
 
