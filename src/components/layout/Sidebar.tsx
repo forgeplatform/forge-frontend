@@ -30,6 +30,10 @@ import {
   ShieldAlert,
   Camera,
   BarChart3,
+  Store,
+  ClipboardList,
+  Inbox,
+  LayoutGrid,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -64,6 +68,15 @@ const navigation: NavGroup[] = [
       { labelKey: 'nav.event_rules', path: '/event_rules', icon: Zap },
       { labelKey: 'nav.event_logs', path: '/event_logs', icon: ScrollText },
       { labelKey: 'nav.outbound_webhooks', path: '/outbound_webhooks', icon: Webhook },
+    ],
+  },
+  {
+    titleKey: 'nav.self_service',
+    items: [
+      { labelKey: 'nav.service_portal', path: '/service_portal', icon: Store },
+      { labelKey: 'nav.my_requests', path: '/my_requests', icon: ClipboardList },
+      { labelKey: 'nav.service_approvals', path: '/service_approvals', icon: Inbox },
+      { labelKey: 'nav.service_catalog', path: '/service_catalog', icon: LayoutGrid },
     ],
   },
   {

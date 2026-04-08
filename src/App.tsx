@@ -68,6 +68,12 @@ import { DriftAlerts } from '@/pages/DriftAlerts'
 import { DriftAlertDetail } from '@/pages/DriftAlertDetail'
 import { FactSnapshots } from '@/pages/FactSnapshots'
 import { Analytics } from '@/pages/Analytics'
+import { ServicePortal } from '@/pages/ServicePortal'
+import { MyServiceRequests } from '@/pages/MyServiceRequests'
+import { ServiceRequestDetail } from '@/pages/ServiceRequestDetail'
+import { ServiceApprovals } from '@/pages/ServiceApprovals'
+import { ServiceCatalogAdmin } from '@/pages/ServiceCatalogAdmin'
+import { ServiceCatalogItemForm } from '@/pages/ServiceCatalogItemForm'
 import { useEffect } from 'react'
 
 function AuthenticatedRoutes() {
@@ -170,6 +176,15 @@ function AuthenticatedRoutes() {
 
         {/* Analytics */}
         <Route path="/analytics" element={<Analytics />} />
+
+        {/* Self-Service Portal */}
+        <Route path="/service_portal" element={<ServicePortal />} />
+        <Route path="/my_requests" element={<MyServiceRequests />} />
+        <Route path="/service_requests/:id" element={<ServiceRequestDetail />} />
+        <Route path="/service_approvals" element={<ServiceApprovals />} />
+        <Route path="/service_catalog" element={<ServiceCatalogAdmin />} />
+        <Route path="/service_catalog/new" element={<ServiceCatalogItemForm />} />
+        <Route path="/service_catalog/:id/edit" element={<ServiceCatalogItemForm />} />
 
         <Route path="/settings" element={<Settings />} />
         <Route path="/settings/:slug" element={<SettingsCategory />} />

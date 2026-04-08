@@ -8,12 +8,10 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Select } from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { CodeEditor } from '@/components/CodeEditor'
+import { SurveyQuestionInput } from '@/components/SurveyQuestionInput'
 import type { WorkflowJobTemplate, WorkflowNodeSurveyInfo } from '@/api/types'
 import { api } from '@/api/client'
 import { useQuery } from '@tanstack/react-query'
@@ -38,69 +36,6 @@ function useWorkflowLaunchData(templateId: string) {
     },
     enabled: !!templateId,
   })
-}
-
-function SurveyQuestionInput({
-  question,
-  value,
-  onChange,
-}: {
-  question: WorkflowNodeSurveyInfo['survey_spec']['spec'][0]
-  value: unknown
-  onChange: (val: unknown) => void
-}) {
-  const qType = question.type
-
-  if (qType === 'multiplechoice') {
-    const choices = (question.choices || '').split('\n').filter(Boolean)
-    const options = choices.map(c => ({ value: c, label: c }))
-    return (
-      <Select
-        value={String(value ?? '')}
-        onChange={(e) => onChange(e.target.value)}
-        options={[{ value: '', label: '-- Select --' }, ...options]}
-      />
-    )
-  }
-
-  if (qType === 'textarea') {
-    return (
-      <Textarea
-        value={String(value ?? '')}
-        onChange={(e) => onChange(e.target.value)}
-        rows={3}
-      />
-    )
-  }
-
-  if (qType === 'integer' || qType === 'float') {
-    return (
-      <Input
-        type="number"
-        value={String(value ?? '')}
-        onChange={(e) => onChange(qType === 'integer' ? parseInt(e.target.value) : parseFloat(e.target.value))}
-        min={question.min ?? undefined}
-        max={question.max ?? undefined}
-      />
-    )
-  }
-
-  if (qType === 'password') {
-    return (
-      <Input
-        type="password"
-        value={String(value ?? '')}
-        onChange={(e) => onChange(e.target.value)}
-      />
-    )
-  }
-
-  return (
-    <Input
-      value={String(value ?? '')}
-      onChange={(e) => onChange(e.target.value)}
-    />
-  )
 }
 
 export function WorkflowLaunchDialog({
@@ -209,7 +144,7 @@ export function WorkflowLaunchDialog({
                   <p className="text-xs text-muted-foreground">{q.question_description}</p>
                 )}
                 <SurveyQuestionInput
-                  question={q}
+                  question={q as unknown as import('@/api/types').SurveyQuestion}
                   value={answers[q.variable]}
                   onChange={(val) => {
                     setNodeSurveyAnswers(prev => ({

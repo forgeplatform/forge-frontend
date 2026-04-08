@@ -64,6 +64,11 @@
     "drift_alerts": "Drift Alerts",
     "drift_alert_rules": "Alert Rules",
     "fact_snapshots": "Fact Snapshots",
-    "analytics": "Analytics"
+    "analytics": "Analytics",
+    "self_service": "Self-Service",
+    "service_portal": "Service Portal",
+    "my_requests": "My Requests",
+    "service_approvals": "Approvals",
+    "service_catalog": "Catalog Admin"
   }
 }
