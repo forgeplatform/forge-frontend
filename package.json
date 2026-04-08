@@ -14,6 +14,7 @@
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
     "@monaco-editor/react": "^4.7.0",
+    "@simplewebauthn/browser": "^13.3.0",
     "@tanstack/react-query": "^5.62.0",
     "@tanstack/react-table": "^8.20.0",
     "@xterm/addon-fit": "^0.11.0",

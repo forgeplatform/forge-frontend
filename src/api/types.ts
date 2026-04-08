@@ -1133,3 +1133,25 @@ export interface ServiceRequestSubmitPayload {
   node_survey_data?: Record<string, Record<string, unknown>>
   justification?: string
 }
+
+// ---------------------------------------------------------------------------
+// WebAuthn / FIDO2
+// ---------------------------------------------------------------------------
+
+export interface WebAuthnCredential {
+  id: number
+  label: string
+  transports: string[]
+  aaguid: string
+  created: string
+  last_used_at: string | null
+  sign_count: number
+  backup_eligible: boolean
+  backup_state: boolean
+}
+
+export interface WebAuthnAuthenticationCompleteResponse {
+  logged_in?: boolean
+  mfa_satisfied?: boolean
+  username?: string
+}

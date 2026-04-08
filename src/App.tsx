@@ -74,6 +74,8 @@ import { ServiceRequestDetail } from '@/pages/ServiceRequestDetail'
 import { ServiceApprovals } from '@/pages/ServiceApprovals'
 import { ServiceCatalogAdmin } from '@/pages/ServiceCatalogAdmin'
 import { ServiceCatalogItemForm } from '@/pages/ServiceCatalogItemForm'
+import { UserSecurity } from '@/pages/UserSecurity'
+import { MfaChallenge } from '@/pages/MfaChallenge'
 import { useEffect } from 'react'
 
 function AuthenticatedRoutes() {
@@ -185,6 +187,10 @@ function AuthenticatedRoutes() {
         <Route path="/service_catalog" element={<ServiceCatalogAdmin />} />
         <Route path="/service_catalog/new" element={<ServiceCatalogItemForm />} />
         <Route path="/service_catalog/:id/edit" element={<ServiceCatalogItemForm />} />
+
+        {/* Account security */}
+        <Route path="/me/security" element={<UserSecurity />} />
+        <Route path="/auth/mfa" element={<MfaChallenge />} />
 
         <Route path="/settings" element={<Settings />} />
         <Route path="/settings/:slug" element={<SettingsCategory />} />

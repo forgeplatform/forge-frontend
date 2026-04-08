@@ -69,6 +69,7 @@
     "service_portal": "Service Portal",
     "my_requests": "My Requests",
     "service_approvals": "Approvals",
-    "service_catalog": "Catalog Admin"
+    "service_catalog": "Catalog Admin",
+    "security": "Security"
   }
 }
