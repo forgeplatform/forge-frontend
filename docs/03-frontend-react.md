@@ -243,6 +243,10 @@ The theme is stored in localStorage under the key `forge-theme`.
 # Analytics
 /analytics                      Automation analytics dashboard (trends, coverage, time savings)
 
+# Account security (OIDC + WebAuthn)
+/me/security                    FIDO2 credential management (register, rename, delete)
+/auth/mfa                       Post-primary-auth WebAuthn assertion interstitial
+
 # Self-Service Portal
 /service_portal                 Catalog browse (cards by category, request dialog)
 /my_requests                    End-user request inbox (status filter)
