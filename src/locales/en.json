@@ -70,6 +70,8 @@
     "my_requests": "My Requests",
     "service_approvals": "Approvals",
     "service_catalog": "Catalog Admin",
-    "security": "Security"
+    "security": "Security",
+    "policies": "Policies",
+    "policy_decisions": "Policy Decisions"
   }
 }

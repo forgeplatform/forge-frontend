@@ -1155,3 +1155,55 @@ export interface WebAuthnAuthenticationCompleteResponse {
   mfa_satisfied?: boolean
   username?: string
 }
+
+// ---------------------------------------------------------------------------
+// Policy-as-Code (OPA)
+// ---------------------------------------------------------------------------
+
+export type PolicyEnforcement = 'none' | 'warn' | 'enforce'
+export type PolicyDecisionKind = 'allow' | 'warn' | 'deny'
+export type PolicyAppliesTo = 'job_template' | 'workflow_job_template' | 'ad_hoc_command'
+
+export interface Policy {
+  id: number
+  type: 'policy'
+  url: string
+  related?: Record<string, string>
+  name: string
+  description: string
+  organization: number | null
+  rego_module: string
+  package_path: string
+  enforcement: PolicyEnforcement
+  enabled: boolean
+  applies_to: PolicyAppliesTo[]
+  trigger_count: number
+  last_triggered_at: string | null
+  last_evaluated_at: string | null
+  last_sync_status: string
+  created: string
+  modified: string
+}
+
+export interface PolicyDecision {
+  id: number
+  type: 'policy_decision'
+  url: string
+  policy: number | null
+  policy_name: string
+  decision: PolicyDecisionKind
+  unified_job: number | null
+  unified_job_template: number | null
+  organization: number | null
+  triggered_by: number | null
+  message: string
+  context: Record<string, unknown>
+  created: string
+}
+
+export interface PolicyTestResponse {
+  allowed: boolean
+  warnings: string[]
+  denies: string[]
+  raw: unknown
+}

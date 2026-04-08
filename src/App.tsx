@@ -76,6 +76,9 @@ import { ServiceCatalogAdmin } from '@/pages/ServiceCatalogAdmin'
 import { ServiceCatalogItemForm } from '@/pages/ServiceCatalogItemForm'
 import { UserSecurity } from '@/pages/UserSecurity'
 import { MfaChallenge } from '@/pages/MfaChallenge'
+import { Policies } from '@/pages/Policies'
+import { PolicyForm } from '@/pages/PolicyForm'
+import { PolicyDecisions } from '@/pages/PolicyDecisions'
 import { useEffect } from 'react'
 
 function AuthenticatedRoutes() {
@@ -191,6 +194,12 @@ function AuthenticatedRoutes() {
         {/* Account security */}
         <Route path="/me/security" element={<UserSecurity />} />
         <Route path="/auth/mfa" element={<MfaChallenge />} />
+
+        {/* Policy-as-Code */}
+        <Route path="/policies" element={<Policies />} />
+        <Route path="/policies/new" element={<PolicyForm />} />
+        <Route path="/policies/:id/edit" element={<PolicyForm />} />
+        <Route path="/policy_decisions" element={<PolicyDecisions />} />
 
         <Route path="/settings" element={<Settings />} />
         <Route path="/settings/:slug" element={<SettingsCategory />} />
