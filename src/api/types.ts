@@ -1032,3 +1032,104 @@ export interface AnalyticsTimeSavings {
   avg_job_duration: number
   manual_multiplier: number
 }
+
+// ---------------------------------------------------------------------------
+// Self-Service Portal
+// ---------------------------------------------------------------------------
+
+export type ServiceRequestStatus =
+  | 'pending_approval'
+  | 'approved'
+  | 'rejected'
+  | 'running'
+  | 'successful'
+  | 'failed'
+  | 'canceled'
+
+export interface ServiceCatalogItem {
+  id: number
+  type: 'service_catalog_item'
+  url: string
+  related?: Record<string, string>
+  summary_fields?: {
+    organization?: { id: number; name: string }
+    template?: { id: number; name: string; kind: 'job_template' | 'workflow_job_template' }
+    approver_team?: { id: number; name: string }
+  }
+  name: string
+  description: string
+  icon: string
+  category: string
+  tags: string[]
+  organization: number | null
+  job_template: number | null
+  workflow_job_template: number | null
+  requires_approval: boolean
+  approver_team: number | null
+  enabled: boolean
+  is_workflow: boolean
+  created: string
+  modified: string
+}
+
+export interface ServiceCatalogItemLaunchData {
+  catalog_item: {
+    id: number
+    name: string
+    description: string
+    icon: string
+    requires_approval: boolean
+  }
+  is_workflow: boolean
+  survey_enabled: boolean
+  survey_spec: { spec?: SurveyQuestion[]; name?: string; description?: string } | Record<string, unknown>
+  ask_variables_on_launch: boolean
+  node_surveys?: Array<{
+    node_id: number
+    identifier: string
+    survey_spec: { spec?: SurveyQuestion[] } | Record<string, unknown>
+  }>
+}
+
+export interface SurveyQuestion {
+  question_name: string
+  question_description?: string
+  variable: string
+  type: 'text' | 'textarea' | 'password' | 'integer' | 'float' | 'multiplechoice' | 'multiselect'
+  required: boolean
+  default?: string | number
+  choices?: string | string[]
+  min?: number
+  max?: number
+}
+
+export interface ServiceRequest {
+  id: number
+  type: 'service_request'
+  url: string
+  related?: Record<string, string>
+  summary_fields?: {
+    catalog_item: { id: number; name: string; icon: string; category: string }
+    requested_by?: { id: number; username: string }
+    approved_by?: { id: number; username: string }
+    unified_job?: { id: number; status: string | null }
+  }
+  catalog_item: number
+  requested_by: number | null
+  status: ServiceRequestStatus
+  extra_vars: Record<string, unknown>
+  node_survey_data: Record<string, Record<string, unknown>>
+  justification: string
+  approved_by: number | null
+  approved_at: string | null
+  rejection_reason: string
+  unified_job: number | null
+  created: string
+  modified: string
+}
+
+export interface ServiceRequestSubmitPayload {
+  extra_vars?: Record<string, unknown>
+  node_survey_data?: Record<string, Record<string, unknown>>
+  justification?: string
+}
