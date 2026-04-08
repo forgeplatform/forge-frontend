@@ -247,6 +247,12 @@ The theme is stored in localStorage under the key `forge-theme`.
 /me/security                    FIDO2 credential management (register, rename, delete)
 /auth/mfa                       Post-primary-auth WebAuthn assertion interstitial
 
+# Policy-as-Code (OPA)
+/policies                       Policy list with enabled toggle and sync status
+/policies/new                   New policy form (Rego editor + dry run)
+/policies/:id/edit              Edit policy
+/policy_decisions               Policy decision audit log
+
 # Self-Service Portal
 /service_portal                 Catalog browse (cards by category, request dialog)
 /my_requests                    End-user request inbox (status filter)

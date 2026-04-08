@@ -34,6 +34,8 @@ import {
   ClipboardList,
   Inbox,
   LayoutGrid,
+  FileLock2,
+  Gavel,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -86,6 +88,8 @@ const navigation: NavGroup[] = [
       { labelKey: 'nav.drift_alerts', path: '/drift_alerts', icon: AlertTriangle },
       { labelKey: 'nav.drift_alert_rules', path: '/drift_alert_rules', icon: ShieldAlert },
       { labelKey: 'nav.fact_snapshots', path: '/fact_snapshots', icon: Camera },
+      { labelKey: 'nav.policies', path: '/policies', icon: FileLock2 },
+      { labelKey: 'nav.policy_decisions', path: '/policy_decisions', icon: Gavel },
     ],
   },
   {
