@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useLocation, Link } from 'react-router-dom'
-import { Moon, Sun, LogOut, User, Menu } from 'lucide-react'
+import { Moon, Sun, LogOut, User, Menu, ShieldCheck } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useAuthStore } from '@/stores/auth'
 import { useThemeStore } from '@/stores/theme'
@@ -119,6 +119,15 @@ export function TopBar({ onMobileMenuToggle }: TopBarProps) {
               >
                 <User className="h-4 w-4" />
                 Profile
+              </Link>
+              <Link
+                to="/me/security"
+                role="menuitem"
+                className="flex w-full items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent"
+                onClick={() => setUserMenuOpen(false)}
+              >
+                <ShieldCheck className="h-4 w-4" />
+                Security
               </Link>
               <button
                 role="menuitem"

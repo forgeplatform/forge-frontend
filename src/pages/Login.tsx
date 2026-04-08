@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Anvil } from 'lucide-react'
+import { Anvil, KeyRound } from 'lucide-react'
 import { useLogin } from '@/api/hooks/useAuth'
+import { useAuthenticateWebAuthn } from '@/api/hooks/useWebAuthn'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -20,6 +21,7 @@ export function Login() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const login = useLogin()
+  const webauthn = useAuthenticateWebAuthn()
   const navigate = useNavigate()
   const { theme, toggleTheme } = useThemeStore()
 
@@ -102,6 +104,44 @@ export function Login() {
               {login.isPending ? 'Signing in...' : 'Sign in'}
             </Button>
           </form>
+
+          <div className="mt-4 space-y-2">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-card px-2 text-muted-foreground">Or</span>
+              </div>
+            </div>
+
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              disabled={webauthn.isPending || !username}
+              onClick={() =>
+                webauthn.mutate(
+                  { username },
+                  {
+                    onSuccess: (data) => {
+                      if (data?.logged_in) navigate('/')
+                    },
+                  },
+                )
+              }
+            >
+              <KeyRound className="mr-2 h-4 w-4" />
+              {webauthn.isPending ? 'Waiting for key…' : 'Sign in with security key'}
+            </Button>
+
+            <a
+              href="/sso/login/oidc/"
+              className="block w-full rounded-md border border-input bg-background px-4 py-2 text-center text-sm font-medium ring-offset-background hover:bg-accent hover:text-accent-foreground"
+            >
+              Sign in with OIDC
+            </a>
+          </div>
         </CardContent>
       </Card>
 
