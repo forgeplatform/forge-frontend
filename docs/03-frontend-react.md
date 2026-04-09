@@ -262,6 +262,17 @@ The theme is stored in localStorage under the key `forge-theme`.
 # Observability (Tier 3.6)
 /observability                  Read-only OpenTelemetry panel: enabled state, service name, exporter endpoint, sampler + ratio, Collector health badge (green/red) with last-check timestamp, and a short "how to view traces" note pointing at the deploy docs. Sidebar entry lives under the Compliance group (Activity icon from lucide-react). Backed by `GET /api/v2/observability/` via `useObservability()`.
 
+# Multi-Tenancy (Tier 3.2)
+/tenants                        Tenant orgs list: usage bars (concurrent jobs, daily launches, hosts, storage) with X/Y progress, branding preview (logo + color swatches), custom domain, actions. Backed by `useTenants()`.
+/tenants/new                    Create tenant form: name, contact email, admin user (username/email/password), quota inputs (empty = unlimited), branding section (logo URL, primary/secondary hex color picker, custom domain). POST `/api/v2/tenants/` provisions Org + admin + team + TenantUsage atomically.
+/tenants/:id                    Tenant detail: usage charts, recent quota events, recalculate button, danger-zone delete with confirmation modal.
+/tenants/:id/edit               Edit tenant (quotas + branding; admin user fields are create-only).
+/tenant_quota_events            Quota audit log filterable by organization / quota_kind / decision / since.
+
+Sidebar NEW group **Tenancy** above the Compliance group, with `Building2` (Tenants) and `Activity` (Quota Events) icons.
+
+**Boot-time branding** (`src/branding/applyBranding.ts`): called from `src/main.tsx` **before** React mounts. Reads localStorage for a cached `forge.branding` entry (TTL 5 min); on miss, fetches `/api/v2/branding/?host=${window.location.hostname}` with no auth / no credentials. On success, sets CSS variables `--forge-primary` and `--forge-secondary` on `:root`, updates the document title, and swaps the favicon. Cached for 5 minutes to keep cold-load under the fetch time. Tailwind exposes these CSS vars as `colors.brand.primary` / `colors.brand.secondary`. The branding endpoint is **public** on the backend so the skin applies before the login screen.
+
 # Self-Service Portal
 /service_portal                 Catalog browse (cards by category, request dialog)
 /my_requests                    End-user request inbox (status filter)

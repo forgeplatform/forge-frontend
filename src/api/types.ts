@@ -1223,6 +1223,82 @@ export interface ObservabilityConfig {
 }
 
 // ---------------------------------------------------------------------------
+// Multi-Tenancy
+// ---------------------------------------------------------------------------
+
+export interface TenantQuota {
+  max_concurrent_jobs: number | null
+  max_daily_launches: number | null
+  max_hosts: number | null
+  max_storage_mb: number | null
+}
+
+export interface TenantUsage {
+  concurrent_jobs_count: number
+  launches_today_count: number
+  hosts_count: number
+  storage_mb_used: number
+  last_recalculated_at: string | null
+}
+
+export interface TenantBranding {
+  logo_url: string
+  primary_color: string
+  secondary_color: string
+  custom_domain: string
+}
+
+export interface Tenant {
+  id: number
+  name: string
+  is_tenant_root: boolean
+  contact_email: string
+  isolation_strict: boolean
+  quota: TenantQuota
+  usage: TenantUsage
+  branding: TenantBranding
+  created: string
+  modified: string
+}
+
+export type TenantQuotaKind = 'concurrent_jobs' | 'daily_launches' | 'hosts' | 'storage_mb'
+export type TenantQuotaDecision = 'allowed' | 'blocked'
+
+export interface TenantQuotaEvent {
+  id: number
+  organization: number | null
+  organization_name: string
+  quota_kind: TenantQuotaKind
+  decision: TenantQuotaDecision
+  current_value: number
+  limit_value: number | null
+  triggered_by: number | null
+  unified_job_template: number | null
+  message: string
+  created: string
+}
+
+export interface Branding {
+  tenant_id: number
+  name: string
+  logo_url: string
+  primary_color: string
+  secondary_color: string
+  contact_email: string
+}
+
+export interface TenantProvisionPayload {
+  name: string
+  admin_username: string
+  admin_email: string
+  admin_password: string
+  contact_email?: string
+  isolation_strict?: boolean
+  quota?: Partial<TenantQuota>
+  branding?: Partial<TenantBranding>
+}
+
+// ---------------------------------------------------------------------------
 // IaC Scanning & Supply Chain Security
 // ---------------------------------------------------------------------------
 

@@ -37,6 +37,7 @@ import {
   FileLock2,
   Gavel,
   ScanLine,
+  Gauge,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -80,6 +81,13 @@ const navigation: NavGroup[] = [
       { labelKey: 'nav.my_requests', path: '/my_requests', icon: ClipboardList },
       { labelKey: 'nav.service_approvals', path: '/service_approvals', icon: Inbox },
       { labelKey: 'nav.service_catalog', path: '/service_catalog', icon: LayoutGrid },
+    ],
+  },
+  {
+    titleKey: 'nav.tenancy',
+    items: [
+      { labelKey: 'nav.tenants', path: '/tenants', icon: Building2 },
+      { labelKey: 'nav.tenant_quota_events', path: '/tenant_quota_events', icon: Gauge },
     ],
   },
   {

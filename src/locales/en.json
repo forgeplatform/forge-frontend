@@ -75,7 +75,10 @@
     "policy_decisions": "Policy Decisions",
     "scanners": "Scanners",
     "scan_results": "Scan Results",
-    "observability": "Observability"
+    "observability": "Observability",
+    "tenancy": "Tenancy",
+    "tenants": "Tenants",
+    "tenant_quota_events": "Quota Events"
   },
   "scanners": {
     "title": "Scanners",
@@ -113,5 +116,39 @@
     "unhealthy": "Unhealthy",
     "last_check": "Last check",
     "help_text": "Configure via OTEL_* environment variables or Settings → System. Point your Grafana / Jaeger / Datadog / Tempo at the Collector — see deploy docs."
+  },
+  "tenants": {
+    "title": "Tenants",
+    "new": "New Tenant",
+    "edit": "Edit Tenant",
+    "name": "Name",
+    "contact_email": "Contact email",
+    "custom_domain": "Custom domain",
+    "logo_url": "Logo URL",
+    "primary_color": "Primary color",
+    "secondary_color": "Secondary color",
+    "admin_username": "Admin username",
+    "admin_email": "Admin email",
+    "admin_password": "Admin password",
+    "basic": "Basic",
+    "quotas": "Quotas",
+    "branding": "Branding",
+    "usage": "Usage",
+    "danger_zone": "Danger zone",
+    "max_concurrent_jobs": "Max concurrent jobs",
+    "max_daily_launches": "Max daily launches",
+    "max_hosts": "Max hosts",
+    "max_storage_mb": "Max storage (MB)",
+    "unlimited_hint": "Empty or 0 = unlimited",
+    "quota_events": "Quota Events",
+    "quota_kind_concurrent_jobs": "Concurrent jobs",
+    "quota_kind_daily_launches": "Daily launches",
+    "quota_kind_hosts": "Hosts",
+    "quota_kind_storage_mb": "Storage (MB)",
+    "decision_allowed": "Allowed",
+    "decision_blocked": "Blocked",
+    "recalculate": "Recalculate usage",
+    "delete_confirm": "Delete this tenant?",
+    "delete_warning": "This will permanently wipe all tenant data including users, inventories, jobs and history. This action cannot be undone."
   }
 }

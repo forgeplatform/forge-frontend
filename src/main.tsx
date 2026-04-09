@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { Toaster, toast } from 'sonner'
 import { App } from './App'
 import { ErrorBoundary } from './components/ErrorBoundary'
+import { applyBranding } from './branding/applyBranding'
 import './i18n'
 import './index.css'
 
@@ -27,15 +28,18 @@ const queryClient = new QueryClient({
   }),
 })
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <App />
-          <Toaster position="bottom-right" richColors closeButton />
-        </BrowserRouter>
-      </QueryClientProvider>
-    </ErrorBoundary>
-  </React.StrictMode>,
-)
+void (async () => {
+  await applyBranding()
+  ReactDOM.createRoot(document.getElementById('root')!).render(
+    <React.StrictMode>
+      <ErrorBoundary>
+        <QueryClientProvider client={queryClient}>
+          <BrowserRouter>
+            <App />
+            <Toaster position="bottom-right" richColors closeButton />
+          </BrowserRouter>
+        </QueryClientProvider>
+      </ErrorBoundary>
+    </React.StrictMode>,
+  )
+})()
