@@ -83,6 +83,10 @@ import { Scanners } from '@/pages/Scanners'
 import { ScannerForm } from '@/pages/ScannerForm'
 import { ScanResults } from '@/pages/ScanResults'
 import { Observability } from '@/pages/Observability'
+import { Tenants } from '@/pages/Tenants'
+import { TenantForm } from '@/pages/TenantForm'
+import { TenantDetail } from '@/pages/TenantDetail'
+import { TenantQuotaEvents } from '@/pages/TenantQuotaEvents'
 import { useEffect } from 'react'
 
 function AuthenticatedRoutes() {
@@ -209,6 +213,13 @@ function AuthenticatedRoutes() {
         <Route path="/scanners/:id/edit" element={<ScannerForm />} />
         <Route path="/scan_results" element={<ScanResults />} />
         <Route path="/observability" element={<Observability />} />
+
+        {/* Multi-Tenancy */}
+        <Route path="/tenants" element={<Tenants />} />
+        <Route path="/tenants/new" element={<TenantForm />} />
+        <Route path="/tenants/:id/edit" element={<TenantForm />} />
+        <Route path="/tenants/:id" element={<TenantDetail />} />
+        <Route path="/tenant_quota_events" element={<TenantQuotaEvents />} />
 
         <Route path="/settings" element={<Settings />} />
         <Route path="/settings/:slug" element={<SettingsCategory />} />
