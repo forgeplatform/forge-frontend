@@ -79,6 +79,9 @@ import { MfaChallenge } from '@/pages/MfaChallenge'
 import { Policies } from '@/pages/Policies'
 import { PolicyForm } from '@/pages/PolicyForm'
 import { PolicyDecisions } from '@/pages/PolicyDecisions'
+import { Scanners } from '@/pages/Scanners'
+import { ScannerForm } from '@/pages/ScannerForm'
+import { ScanResults } from '@/pages/ScanResults'
 import { useEffect } from 'react'
 
 function AuthenticatedRoutes() {
@@ -200,6 +203,10 @@ function AuthenticatedRoutes() {
         <Route path="/policies/new" element={<PolicyForm />} />
         <Route path="/policies/:id/edit" element={<PolicyForm />} />
         <Route path="/policy_decisions" element={<PolicyDecisions />} />
+        <Route path="/scanners" element={<Scanners />} />
+        <Route path="/scanners/new" element={<ScannerForm />} />
+        <Route path="/scanners/:id/edit" element={<ScannerForm />} />
+        <Route path="/scan_results" element={<ScanResults />} />
 
         <Route path="/settings" element={<Settings />} />
         <Route path="/settings/:slug" element={<SettingsCategory />} />

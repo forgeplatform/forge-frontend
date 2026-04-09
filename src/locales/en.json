@@ -72,6 +72,29 @@
     "service_catalog": "Catalog Admin",
     "security": "Security",
     "policies": "Policies",
-    "policy_decisions": "Policy Decisions"
+    "policy_decisions": "Policy Decisions",
+    "scanners": "Scanners",
+    "scan_results": "Scan Results"
+  },
+  "scanners": {
+    "title": "Scanners",
+    "scanner": "Scanner",
+    "tool": "Tool",
+    "severity": "Severity",
+    "severity_threshold": "Severity threshold",
+    "threshold": "Threshold",
+    "findings": "Findings",
+    "finding": "Finding",
+    "rule_id": "Rule",
+    "enforcement_warn": "Warn only",
+    "enforcement_enforce": "Enforce (block)",
+    "last_run": "Last run",
+    "trigger_count": "Trigger count",
+    "applies_to": "Applies to",
+    "status_ok": "OK",
+    "status_warn": "Warn",
+    "status_blocked": "Blocked",
+    "status_error": "Error",
+    "status_timeout": "Timeout"
   }
 }
