@@ -36,6 +36,7 @@ import {
   LayoutGrid,
   FileLock2,
   Gavel,
+  ScanLine,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -90,6 +91,8 @@ const navigation: NavGroup[] = [
       { labelKey: 'nav.fact_snapshots', path: '/fact_snapshots', icon: Camera },
       { labelKey: 'nav.policies', path: '/policies', icon: FileLock2 },
       { labelKey: 'nav.policy_decisions', path: '/policy_decisions', icon: Gavel },
+      { labelKey: 'nav.scanners', path: '/scanners', icon: ScanLine },
+      { labelKey: 'nav.scan_results', path: '/scan_results', icon: ShieldAlert },
     ],
   },
   {

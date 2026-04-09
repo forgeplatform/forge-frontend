@@ -1207,3 +1207,64 @@ export interface PolicyTestResponse {
   denies: string[]
   raw: unknown
 }
+
+// ---------------------------------------------------------------------------
+// IaC Scanning & Supply Chain Security
+// ---------------------------------------------------------------------------
+
+export type ScannerTool = 'ansible-lint' | 'checkov' | 'pip-audit'
+export type ScannerEnforcement = 'warn' | 'enforce'
+export type Severity = 'info' | 'low' | 'medium' | 'high' | 'critical'
+export type ScanStatus = 'ok' | 'warn' | 'blocked' | 'error' | 'timeout'
+export type ScannerAppliesTo = 'job_template' | 'workflow_job_template' | 'ad_hoc_command'
+
+export interface Scanner {
+  id: number
+  type?: 'scanner'
+  url?: string
+  related?: Record<string, string>
+  name: string
+  description: string
+  organization: number | null
+  tool: ScannerTool
+  config: Record<string, unknown>
+  severity_threshold: Severity
+  enforcement: ScannerEnforcement
+  enabled: boolean
+  applies_to: ScannerAppliesTo[]
+  trigger_count: number
+  last_run_at: string | null
+  last_run_status: string
+  created: string
+  modified: string
+}
+
+export interface ScanFinding {
+  id: number
+  rule_id: string
+  severity: Severity
+  file_path: string
+  line: number | null
+  message: string
+}
+
+export interface ScanResult {
+  id: number
+  type?: 'scan_result'
+  url?: string
+  scanner: number | null
+  scanner_name: string
+  unified_job: number | null
+  unified_job_template: number | null
+  organization: number | null
+  triggered_by: number | null
+  status: ScanStatus
+  duration_ms: number
+  finding_count: number
+  highest_severity: string
+  message: string
+  raw_output: string
+  findings: ScanFinding[]
+  created: string
+  modified: string
+}

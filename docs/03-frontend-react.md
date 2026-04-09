@@ -253,6 +253,12 @@ The theme is stored in localStorage under the key `forge-theme`.
 /policies/:id/edit              Edit policy
 /policy_decisions               Policy decision audit log
 
+# IaC Scanning & Supply Chain Security
+/scanners                       Scanner list (tool badge, severity threshold, enforcement, last run status, enable toggle)
+/scanners/new                   New scanner form (tool dropdown, severity threshold, enforcement, applies_to, JSON config editor)
+/scanners/:id/edit              Edit scanner
+/scan_results                   Scan result audit log with finding drawer (filter: status, scanner, since)
+
 # Self-Service Portal
 /service_portal                 Catalog browse (cards by category, request dialog)
 /my_requests                    End-user request inbox (status filter)
