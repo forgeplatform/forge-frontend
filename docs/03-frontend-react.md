@@ -259,6 +259,9 @@ The theme is stored in localStorage under the key `forge-theme`.
 /scanners/:id/edit              Edit scanner
 /scan_results                   Scan result audit log with finding drawer (filter: status, scanner, since)
 
+# Observability (Tier 3.6)
+/observability                  Read-only OpenTelemetry panel: enabled state, service name, exporter endpoint, sampler + ratio, Collector health badge (green/red) with last-check timestamp, and a short "how to view traces" note pointing at the deploy docs. Sidebar entry lives under the Compliance group (Activity icon from lucide-react). Backed by `GET /api/v2/observability/` via `useObservability()`.
+
 # Self-Service Portal
 /service_portal                 Catalog browse (cards by category, request dialog)
 /my_requests                    End-user request inbox (status filter)

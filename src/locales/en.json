@@ -74,7 +74,8 @@
     "policies": "Policies",
     "policy_decisions": "Policy Decisions",
     "scanners": "Scanners",
-    "scan_results": "Scan Results"
+    "scan_results": "Scan Results",
+    "observability": "Observability"
   },
   "scanners": {
     "title": "Scanners",
@@ -96,5 +97,21 @@
     "status_blocked": "Blocked",
     "status_error": "Error",
     "status_timeout": "Timeout"
+  },
+  "observability": {
+    "title": "Observability",
+    "status": "Status",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "configuration": "Configuration",
+    "service_name": "Service name",
+    "exporter_endpoint": "Exporter endpoint",
+    "sampler": "Sampler",
+    "sampler_arg": "Sampler argument",
+    "collector_health": "Collector health",
+    "healthy": "Healthy",
+    "unhealthy": "Unhealthy",
+    "last_check": "Last check",
+    "help_text": "Configure via OTEL_* environment variables or Settings → System. Point your Grafana / Jaeger / Datadog / Tempo at the Collector — see deploy docs."
   }
 }

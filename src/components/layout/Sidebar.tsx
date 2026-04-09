@@ -93,6 +93,7 @@ const navigation: NavGroup[] = [
       { labelKey: 'nav.policy_decisions', path: '/policy_decisions', icon: Gavel },
       { labelKey: 'nav.scanners', path: '/scanners', icon: ScanLine },
       { labelKey: 'nav.scan_results', path: '/scan_results', icon: ShieldAlert },
+      { labelKey: 'nav.observability', path: '/observability', icon: Activity },
     ],
   },
   {
