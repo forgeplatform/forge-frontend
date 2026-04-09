@@ -82,6 +82,7 @@ import { PolicyDecisions } from '@/pages/PolicyDecisions'
 import { Scanners } from '@/pages/Scanners'
 import { ScannerForm } from '@/pages/ScannerForm'
 import { ScanResults } from '@/pages/ScanResults'
+import { Observability } from '@/pages/Observability'
 import { useEffect } from 'react'
 
 function AuthenticatedRoutes() {
@@ -207,6 +208,7 @@ function AuthenticatedRoutes() {
         <Route path="/scanners/new" element={<ScannerForm />} />
         <Route path="/scanners/:id/edit" element={<ScannerForm />} />
         <Route path="/scan_results" element={<ScanResults />} />
+        <Route path="/observability" element={<Observability />} />
 
         <Route path="/settings" element={<Settings />} />
         <Route path="/settings/:slug" element={<SettingsCategory />} />

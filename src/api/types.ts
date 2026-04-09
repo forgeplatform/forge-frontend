@@ -1209,6 +1209,20 @@ export interface PolicyTestResponse {
 }
 
 // ---------------------------------------------------------------------------
+// Observability
+// ---------------------------------------------------------------------------
+
+export interface ObservabilityConfig {
+  enabled: boolean
+  service_name: string
+  exporter_endpoint: string
+  sampler: string
+  sampler_arg: string
+  collector_healthy: boolean
+  collector_last_check: string | null
+}
+
+// ---------------------------------------------------------------------------
 // IaC Scanning & Supply Chain Security
 // ---------------------------------------------------------------------------
 
