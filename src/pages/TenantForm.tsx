@@ -44,6 +44,7 @@ export function TenantForm() {
   const [maxDailyLaunches, setMaxDailyLaunches] = useState('')
   const [maxHosts, setMaxHosts] = useState('')
   const [maxStorageMb, setMaxStorageMb] = useState('')
+  const [apiRateLimit, setApiRateLimit] = useState('')
 
   // Isolation
   const [isolationStrict, setIsolationStrict] = useState(false)
@@ -62,6 +63,7 @@ export function TenantForm() {
       setMaxDailyLaunches(existing.quota.max_daily_launches?.toString() ?? '')
       setMaxHosts(existing.quota.max_hosts?.toString() ?? '')
       setMaxStorageMb(existing.quota.max_storage_mb?.toString() ?? '')
+      setApiRateLimit(existing.quota.api_rate_limit?.toString() ?? '')
       setLogoUrl(existing.branding.logo_url || '')
       setPrimaryColor(existing.branding.primary_color || '#2563eb')
       setSecondaryColor(existing.branding.secondary_color || '#64748b')
@@ -77,6 +79,7 @@ export function TenantForm() {
       max_daily_launches: parseNumberOrNull(maxDailyLaunches),
       max_hosts: parseNumberOrNull(maxHosts),
       max_storage_mb: parseNumberOrNull(maxStorageMb),
+      api_rate_limit: parseNumberOrNull(apiRateLimit),
     }
     const branding = {
       logo_url: logoUrl,
@@ -241,6 +244,15 @@ export function TenantForm() {
                   min="0"
                   value={maxStorageMb}
                   onChange={(e) => setMaxStorageMb(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>API Rate Limit (req/s)</Label>
+                <Input
+                  type="number"
+                  min="0"
+                  value={apiRateLimit}
+                  onChange={(e) => setApiRateLimit(e.target.value)}
                 />
               </div>
             </div>

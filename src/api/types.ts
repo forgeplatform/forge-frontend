@@ -1231,6 +1231,7 @@ export interface TenantQuota {
   max_daily_launches: number | null
   max_hosts: number | null
   max_storage_mb: number | null
+  api_rate_limit: number | null
 }
 
 export interface TenantUsage {

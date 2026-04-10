@@ -196,6 +196,11 @@ export function TenantDetail() {
             limit={tenant.quota.max_storage_mb}
           />
         </div>
+        {tenant.quota.api_rate_limit ? (
+          <p className="text-xs text-muted-foreground mt-2">
+            API rate limit: {tenant.quota.api_rate_limit} req/s
+          </p>
+        ) : null}
         {tenant.usage.last_recalculated_at && (
           <p className="text-xs text-muted-foreground mt-2">
             Last recalculated {formatRelativeTime(tenant.usage.last_recalculated_at)}
