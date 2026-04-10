@@ -1298,6 +1298,18 @@ export interface TenantProvisionPayload {
   branding?: Partial<TenantBranding>
 }
 
+export interface TenantIsolationEvent {
+  id: number
+  user: number | null
+  user_organization: number | null
+  accessed_organization: number | null
+  resource_type: string
+  resource_id: number | null
+  request_path: string
+  blocked: boolean
+  created: string
+}
+
 // ---------------------------------------------------------------------------
 // IaC Scanning & Supply Chain Security
 // ---------------------------------------------------------------------------
@@ -1357,4 +1369,28 @@ export interface ScanResult {
   findings: ScanFinding[]
   created: string
   modified: string
+}
+
+// ---------------------------------------------------------------------------
+// Recommendations
+// ---------------------------------------------------------------------------
+
+export type RecommendationSeverity = 'info' | 'warn' | 'critical'
+export type RecommendationScope =
+  | 'dashboard'
+  | 'automation'
+  | 'self_service'
+  | 'tenancy'
+  | 'compliance'
+  | 'resources'
+  | 'access'
+  | 'all'
+
+export interface Recommendation {
+  id: string
+  scope: RecommendationScope
+  severity: RecommendationSeverity
+  title: string
+  why: string
+  action_link: string
 }

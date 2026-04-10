@@ -9,6 +9,7 @@ import type {
   TenantQuotaEvent,
   TenantQuotaKind,
   TenantQuotaDecision,
+  TenantIsolationEvent,
   Branding,
 } from '@/api/types'
 
@@ -132,6 +133,34 @@ export function useTenantQuotaEvents(params: UseTenantQuotaEventsParams = {}) {
       const queryParams: Record<string, string | number> = { page, page_size }
       for (const [k, v] of Object.entries(filters)) if (v !== undefined && v !== '') queryParams[k] = v as string | number
       const { data } = await api.get<PaginatedResponse<TenantQuotaEvent>>('/tenant_quota_events/', { params: queryParams })
+      return data
+    },
+    placeholderData: keepPreviousData,
+  })
+}
+
+// ---------------------------------------------------------------------------
+// Tenant Isolation Events
+// ---------------------------------------------------------------------------
+
+export interface UseTenantIsolationEventsParams {
+  page?: number
+  page_size?: number
+  user?: string | number
+  user_organization?: string | number
+  accessed_organization?: string | number
+  blocked?: string
+  since?: string
+}
+
+export function useTenantIsolationEvents(params: UseTenantIsolationEventsParams = {}) {
+  const { page = 1, page_size = 25, ...filters } = params
+  return useQuery<PaginatedResponse<TenantIsolationEvent>>({
+    queryKey: ['tenant_isolation_events', { page, page_size, ...filters }],
+    queryFn: async () => {
+      const queryParams: Record<string, string | number> = { page, page_size }
+      for (const [k, v] of Object.entries(filters)) if (v !== undefined && v !== '') queryParams[k] = v as string | number
+      const { data } = await api.get<PaginatedResponse<TenantIsolationEvent>>('/tenant_isolation_events/', { params: queryParams })
       return data
     },
     placeholderData: keepPreviousData,

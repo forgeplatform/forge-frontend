@@ -45,6 +45,9 @@ export function TenantForm() {
   const [maxHosts, setMaxHosts] = useState('')
   const [maxStorageMb, setMaxStorageMb] = useState('')
 
+  // Isolation
+  const [isolationStrict, setIsolationStrict] = useState(false)
+
   // Branding
   const [logoUrl, setLogoUrl] = useState('')
   const [primaryColor, setPrimaryColor] = useState('#2563eb')
@@ -63,6 +66,7 @@ export function TenantForm() {
       setPrimaryColor(existing.branding.primary_color || '#2563eb')
       setSecondaryColor(existing.branding.secondary_color || '#64748b')
       setCustomDomain(existing.branding.custom_domain || '')
+      setIsolationStrict(existing.isolation_strict ?? false)
     }
   }, [existing])
 
@@ -86,6 +90,7 @@ export function TenantForm() {
         {
           name,
           contact_email: contactEmail,
+          isolation_strict: isolationStrict,
           quota,
           branding,
         } as never,
@@ -98,6 +103,7 @@ export function TenantForm() {
         admin_email: adminEmail,
         admin_password: adminPassword,
         contact_email: contactEmail,
+        isolation_strict: isolationStrict,
         quota,
         branding,
       }
@@ -137,6 +143,21 @@ export function TenantForm() {
                 value={contactEmail}
                 onChange={(e) => setContactEmail(e.target.value)}
               />
+            </div>
+            <div className="flex items-center gap-3">
+              <input
+                id="isolation_strict"
+                type="checkbox"
+                checked={isolationStrict}
+                onChange={(e) => setIsolationStrict(e.target.checked)}
+                className="h-4 w-4 rounded border-gray-300"
+              />
+              <Label htmlFor="isolation_strict">
+                Strict tenant isolation
+              </Label>
+              <span className="text-xs text-muted-foreground">
+                When enabled, cross-tenant API access is blocked (HTTP 403)
+              </span>
             </div>
           </CardContent>
         </Card>
