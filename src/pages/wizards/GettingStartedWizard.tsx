@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '@/api/client'
 import { Wizard } from '@/components/wizard/Wizard'
-import { TextField, CheckField, SelectField } from '@/components/wizard/fields'
+import { TextField, TextAreaField, CheckField, SelectField } from '@/components/wizard/fields'
 import type { WizardStep } from '@/components/wizard/types'
 
 interface Ctx {
@@ -13,6 +13,8 @@ interface Ctx {
   inventory_name: string
   credential_name: string
   credential_username: string
+  credential_password: string
+  credential_ssh_key: string
   jt_name: string
   playbook: string
   gate_scanning: boolean
@@ -37,6 +39,8 @@ const initial: Ctx = {
   inventory_name: '',
   credential_name: '',
   credential_username: '',
+  credential_password: '',
+  credential_ssh_key: '',
   jt_name: '',
   playbook: '',
   gate_scanning: false,
@@ -149,6 +153,21 @@ const steps: WizardStep<Ctx>[] = [
         <TextField label="Inventory name" value={ctx.inventory_name} onChange={(v) => setCtx({ inventory_name: v })} />
         <TextField label="Credential name" value={ctx.credential_name} onChange={(v) => setCtx({ credential_name: v })} />
         <TextField label="SSH username" value={ctx.credential_username} onChange={(v) => setCtx({ credential_username: v })} />
+        <TextField
+          label="SSH password"
+          type="password"
+          value={ctx.credential_password}
+          onChange={(v) => setCtx({ credential_password: v })}
+          hint="Leave blank if you are using an SSH private key instead."
+        />
+        <TextAreaField
+          label="SSH private key"
+          value={ctx.credential_ssh_key}
+          onChange={(v) => setCtx({ credential_ssh_key: v })}
+          placeholder="-----BEGIN OPENSSH PRIVATE KEY-----&#10;...&#10;-----END OPENSSH PRIVATE KEY-----"
+          rows={6}
+          hint="Paste the full private key PEM. Leave blank if using a password."
+        />
       </div>
     ),
     validate: (ctx) => {
@@ -157,6 +176,10 @@ const steps: WizardStep<Ctx>[] = [
       if (!ctx.inventory_name) errs.push('Inventory name required')
       if (!ctx.credential_name) errs.push('Credential name required')
       if (!ctx.scm_url) errs.push('SCM URL required')
+      if (!ctx.credential_username) errs.push('SSH username required')
+      if (!ctx.credential_password && !ctx.credential_ssh_key) {
+        errs.push('Provide either an SSH password or an SSH private key — the playbook cannot authenticate to the target otherwise.')
+      }
       return errs
     },
     onNext: async (ctx, setCtx) => {
@@ -236,6 +259,14 @@ const steps: WizardStep<Ctx>[] = [
       { label: 'Inventory', value: ctx.inventory_name },
       { label: 'Credential', value: ctx.credential_name },
       { label: 'SSH user', value: ctx.credential_username },
+      {
+        label: 'SSH auth',
+        value: ctx.credential_ssh_key
+          ? 'Private key'
+          : ctx.credential_password
+            ? 'Password'
+            : 'None',
+      },
     ],
   },
   {
@@ -325,6 +356,17 @@ export function GettingStartedWizard() {
       })
       inventoryId = inventory.id as number
     }
+    // Build the Machine credential inputs. AWX's Machine credential
+    // type accepts username, password, ssh_key_data (among others);
+    // we only send what the user actually filled in to avoid
+    // overwriting an empty string on top of a valid existing value if
+    // the row is later edited.
+    const credentialInputs: Record<string, string> = {
+      username: ctx.credential_username,
+    }
+    if (ctx.credential_password) credentialInputs.password = ctx.credential_password
+    if (ctx.credential_ssh_key) credentialInputs.ssh_key_data = ctx.credential_ssh_key
+
     let credentialId: number
     const existingCred = await findCredentialByNameInOrg(
       ctx.credential_name,
@@ -332,13 +374,15 @@ export function GettingStartedWizard() {
       CRED_TYPE_MACHINE,
     )
     if (existingCred) {
+      // Reuse the existing credential as-is. If the user wants to
+      // rotate the secret they can edit it from the Credentials page.
       credentialId = existingCred.id
     } else {
       const { data: credential } = await api.post('/credentials/', {
         name: ctx.credential_name,
         credential_type: CRED_TYPE_MACHINE,
         organization: ctx._org_id,
-        inputs: { username: ctx.credential_username },
+        inputs: credentialInputs,
       })
       credentialId = credential.id as number
     }
