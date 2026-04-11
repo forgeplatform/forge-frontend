@@ -64,12 +64,12 @@ async function waitForProjectSync(projectId: number, maxWaitMs = 120000) {
 }
 
 async function fetchPlaybooks(projectId: number): Promise<string[]> {
-  // AWX exposes the git-tree playbook files both on GET /projects/{id}/
-  // (playbook_files on the detail) and on GET /projects/{id}/playbooks/
-  // (a bare JSON array). We use the detail endpoint so we don't need
-  // yet another round trip.
-  const { data } = await api.get(`/projects/${projectId}/`)
-  const files = (data.playbook_files as string[] | undefined) ?? []
+  // The project detail serializer does NOT include playbook_files
+  // (the field only exists on the Django model), so we must call the
+  // dedicated /projects/{id}/playbooks/ endpoint. It returns a bare
+  // JSON array of relative paths.
+  const { data } = await api.get<string[]>(`/projects/${projectId}/playbooks/`)
+  const files = Array.isArray(data) ? data : []
   return files.filter((f) => /\.ya?ml$/.test(f))
 }
 
