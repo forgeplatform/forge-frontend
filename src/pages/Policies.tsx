@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { FileLock2, Plus, Loader2, Pencil, Trash, Search } from 'lucide-react'
+import { FileLock2, Plus, Loader2, Pencil, Trash, Search, Wand2 } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -46,11 +46,18 @@ export function Policies() {
             Open Policy Agent (Rego) rules evaluated before every launch.
           </p>
         </div>
-        <Link to="/policies/new">
-          <Button>
-            <Plus className="mr-1 h-4 w-4" /> New Policy
-          </Button>
-        </Link>
+        <div className="flex gap-2">
+          <Link to="/wizards/compliance">
+            <Button variant="outline">
+              <Wand2 className="mr-1 h-4 w-4" /> Wizard
+            </Button>
+          </Link>
+          <Link to="/policies/new">
+            <Button>
+              <Plus className="mr-1 h-4 w-4" /> New Policy
+            </Button>
+          </Link>
+        </div>
       </div>
 
       <div className="flex flex-wrap items-center gap-3">

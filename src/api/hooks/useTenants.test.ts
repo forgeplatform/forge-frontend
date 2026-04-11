@@ -25,6 +25,7 @@ describe('Tenant', () => {
         max_daily_launches: 100,
         max_hosts: 500,
         max_storage_mb: 10240,
+        api_rate_limit: 100,
       },
       usage: {
         concurrent_jobs_count: 2,
@@ -54,6 +55,7 @@ describe('TenantQuota', () => {
       max_daily_launches: null,
       max_hosts: null,
       max_storage_mb: null,
+      api_rate_limit: null,
     }
     expect(q.max_concurrent_jobs).toBeNull()
   })

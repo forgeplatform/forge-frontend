@@ -150,5 +150,35 @@
     "recalculate": "Recalculate usage",
     "delete_confirm": "Delete this tenant?",
     "delete_warning": "This will permanently wipe all tenant data including users, inventories, jobs and history. This action cannot be undone."
+  },
+  "wizards": {
+    "title": "Wizard",
+    "next": "Next",
+    "back": "Back",
+    "cancel": "Cancel",
+    "create_all": "Create All",
+    "review": "Review",
+    "review_summary": "Review summary",
+    "step": "Step",
+    "creating": "Creating...",
+    "success": "Created successfully",
+    "error": "Error",
+    "getting_started_title": "Getting Started",
+    "automation_title": "Automation Wizard",
+    "self_service_title": "Self-Service Wizard",
+    "tenancy_title": "Tenancy Wizard",
+    "compliance_title": "Compliance Wizard",
+    "resources_title": "Resources Wizard",
+    "access_title": "Access Wizard"
+  },
+  "recommendations": {
+    "title": "Recommendations",
+    "severity_critical": "Critical",
+    "severity_warn": "Warn",
+    "severity_info": "Info",
+    "dismiss": "Got it",
+    "empty": "No recommendations",
+    "getting_started": "Getting Started",
+    "suggestions": "Suggestions"
   }
 }

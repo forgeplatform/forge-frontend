@@ -38,6 +38,7 @@ import {
   Gavel,
   ScanLine,
   Gauge,
+  Wand2,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -52,6 +53,16 @@ interface NavItem {
 interface NavGroup {
   titleKey: string
   items: NavItem[]
+  wizardPath?: string
+}
+
+const GROUP_WIZARDS: Record<string, string> = {
+  'nav.automation': '/wizards/automation',
+  'nav.self_service': '/wizards/self-service',
+  'nav.tenancy': '/wizards/tenancy',
+  'nav.compliance': '/wizards/compliance',
+  'nav.resources': '/wizards/resources',
+  'nav.access': '/wizards/access',
 }
 
 const navigation: NavGroup[] = [
@@ -164,8 +175,17 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         {navigation.map((group) => (
           <div key={group.titleKey} className="mb-4">
             {!collapsed && (
-              <div className="mb-1 px-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                {t(group.titleKey)}
+              <div className="mb-1 flex items-center justify-between px-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                <span>{t(group.titleKey)}</span>
+                {GROUP_WIZARDS[group.titleKey] && (
+                  <Link
+                    to={GROUP_WIZARDS[group.titleKey] as string}
+                    title={t('wizards.title')}
+                    className="rounded p-0.5 hover:bg-accent hover:text-foreground"
+                  >
+                    <Wand2 className="h-3 w-3" />
+                  </Link>
+                )}
               </div>
             )}
             {collapsed && <div className="mb-1 border-b" />}

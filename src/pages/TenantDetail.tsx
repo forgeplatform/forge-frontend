@@ -10,6 +10,7 @@ import {
   useDeleteTenant,
   useRecalculateTenant,
   useTenantQuotaEvents,
+  useTenantIsolationEvents,
 } from '@/api/hooks/useTenants'
 import { formatRelativeTime } from '@/lib/utils'
 import type { TenantQuotaKind } from '@/api/types'
@@ -77,6 +78,10 @@ export function TenantDetail() {
     organization: id,
     page_size: 10,
   })
+  const { data: isolationEvents } = useTenantIsolationEvents({
+    user_organization: id,
+    page_size: 10,
+  })
 
   if (isLoading || !tenant) {
     return (
@@ -105,6 +110,9 @@ export function TenantDetail() {
         </h1>
         {tenant.branding.custom_domain && (
           <Badge variant="outline">{tenant.branding.custom_domain}</Badge>
+        )}
+        {tenant.isolation_strict && (
+          <Badge variant="warning">Strict Isolation</Badge>
         )}
         <div className="ml-auto flex gap-2">
           <Link to={`/tenants/${tenant.id}/edit`}>
@@ -188,6 +196,11 @@ export function TenantDetail() {
             limit={tenant.quota.max_storage_mb}
           />
         </div>
+        {tenant.quota.api_rate_limit ? (
+          <p className="text-xs text-muted-foreground mt-2">
+            API rate limit: {tenant.quota.api_rate_limit} req/s
+          </p>
+        ) : null}
         {tenant.usage.last_recalculated_at && (
           <p className="text-xs text-muted-foreground mt-2">
             Last recalculated {formatRelativeTime(tenant.usage.last_recalculated_at)}
@@ -229,6 +242,50 @@ export function TenantDetail() {
                       {e.current_value} / {e.limit_value ?? '∞'}
                     </td>
                     <td className="p-3 text-xs text-muted-foreground">{e.message}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Isolation Events</CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          {!isolationEvents || isolationEvents.results.length === 0 ? (
+            <div className="p-6 text-center text-sm text-muted-foreground">No isolation events.</div>
+          ) : (
+            <table className="w-full text-sm">
+              <thead className="border-b text-left text-xs uppercase text-muted-foreground">
+                <tr>
+                  <th className="p-3">When</th>
+                  <th className="p-3">User</th>
+                  <th className="p-3">Target Org</th>
+                  <th className="p-3">Resource</th>
+                  <th className="p-3">Path</th>
+                  <th className="p-3">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {isolationEvents.results.map((e) => (
+                  <tr key={e.id} className="border-b last:border-0">
+                    <td className="p-3 text-xs text-muted-foreground">
+                      {formatRelativeTime(e.created)}
+                    </td>
+                    <td className="p-3 text-xs">{e.user ?? '—'}</td>
+                    <td className="p-3 text-xs">{e.accessed_organization ?? '—'}</td>
+                    <td className="p-3 text-xs">
+                      {e.resource_type}{e.resource_id ? ` #${e.resource_id}` : ''}
+                    </td>
+                    <td className="p-3 text-xs font-mono text-muted-foreground">{e.request_path}</td>
+                    <td className="p-3">
+                      <Badge variant={e.blocked ? 'error' : 'outline'}>
+                        {e.blocked ? 'Blocked' : 'Audit'}
+                      </Badge>
+                    </td>
                   </tr>
                 ))}
               </tbody>

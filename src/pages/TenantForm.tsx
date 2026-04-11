@@ -44,6 +44,10 @@ export function TenantForm() {
   const [maxDailyLaunches, setMaxDailyLaunches] = useState('')
   const [maxHosts, setMaxHosts] = useState('')
   const [maxStorageMb, setMaxStorageMb] = useState('')
+  const [apiRateLimit, setApiRateLimit] = useState('')
+
+  // Isolation
+  const [isolationStrict, setIsolationStrict] = useState(false)
 
   // Branding
   const [logoUrl, setLogoUrl] = useState('')
@@ -59,10 +63,12 @@ export function TenantForm() {
       setMaxDailyLaunches(existing.quota.max_daily_launches?.toString() ?? '')
       setMaxHosts(existing.quota.max_hosts?.toString() ?? '')
       setMaxStorageMb(existing.quota.max_storage_mb?.toString() ?? '')
+      setApiRateLimit(existing.quota.api_rate_limit?.toString() ?? '')
       setLogoUrl(existing.branding.logo_url || '')
       setPrimaryColor(existing.branding.primary_color || '#2563eb')
       setSecondaryColor(existing.branding.secondary_color || '#64748b')
       setCustomDomain(existing.branding.custom_domain || '')
+      setIsolationStrict(existing.isolation_strict ?? false)
     }
   }, [existing])
 
@@ -73,6 +79,7 @@ export function TenantForm() {
       max_daily_launches: parseNumberOrNull(maxDailyLaunches),
       max_hosts: parseNumberOrNull(maxHosts),
       max_storage_mb: parseNumberOrNull(maxStorageMb),
+      api_rate_limit: parseNumberOrNull(apiRateLimit),
     }
     const branding = {
       logo_url: logoUrl,
@@ -86,6 +93,7 @@ export function TenantForm() {
         {
           name,
           contact_email: contactEmail,
+          isolation_strict: isolationStrict,
           quota,
           branding,
         } as never,
@@ -98,6 +106,7 @@ export function TenantForm() {
         admin_email: adminEmail,
         admin_password: adminPassword,
         contact_email: contactEmail,
+        isolation_strict: isolationStrict,
         quota,
         branding,
       }
@@ -137,6 +146,21 @@ export function TenantForm() {
                 value={contactEmail}
                 onChange={(e) => setContactEmail(e.target.value)}
               />
+            </div>
+            <div className="flex items-center gap-3">
+              <input
+                id="isolation_strict"
+                type="checkbox"
+                checked={isolationStrict}
+                onChange={(e) => setIsolationStrict(e.target.checked)}
+                className="h-4 w-4 rounded border-gray-300"
+              />
+              <Label htmlFor="isolation_strict">
+                Strict tenant isolation
+              </Label>
+              <span className="text-xs text-muted-foreground">
+                When enabled, cross-tenant API access is blocked (HTTP 403)
+              </span>
             </div>
           </CardContent>
         </Card>
@@ -220,6 +244,15 @@ export function TenantForm() {
                   min="0"
                   value={maxStorageMb}
                   onChange={(e) => setMaxStorageMb(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>API Rate Limit (req/s)</Label>
+                <Input
+                  type="number"
+                  min="0"
+                  value={apiRateLimit}
+                  onChange={(e) => setApiRateLimit(e.target.value)}
                 />
               </div>
             </div>
