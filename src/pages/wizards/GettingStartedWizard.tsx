@@ -73,6 +73,56 @@ async function fetchPlaybooks(projectId: number): Promise<string[]> {
   return files.filter((f) => /\.ya?ml$/.test(f))
 }
 
+/**
+ * Fetch an organization by exact name, or null if none exists. Makes
+ * the wizard idempotent: if the user reruns it against a name they
+ * already have, we reuse the existing row rather than blowing up with
+ * a unique-name violation.
+ */
+async function findOrganizationByName(name: string): Promise<{ id: number } | null> {
+  const { data } = await api.get(`/organizations/`, { params: { name } })
+  const match = (data.results as Array<{ id: number; name: string }> | undefined)?.find(
+    (o) => o.name === name,
+  )
+  return match ? { id: match.id } : null
+}
+
+async function findProjectByNameInOrg(
+  name: string,
+  orgId: number,
+): Promise<{ id: number; scm_url: string } | null> {
+  const { data } = await api.get(`/projects/`, { params: { name, organization: orgId } })
+  const match = (data.results as Array<{ id: number; name: string; scm_url: string }> | undefined)?.find(
+    (p) => p.name === name,
+  )
+  return match ? { id: match.id, scm_url: match.scm_url } : null
+}
+
+async function findInventoryByNameInOrg(
+  name: string,
+  orgId: number,
+): Promise<{ id: number } | null> {
+  const { data } = await api.get(`/inventories/`, { params: { name, organization: orgId } })
+  const match = (data.results as Array<{ id: number; name: string }> | undefined)?.find(
+    (i) => i.name === name,
+  )
+  return match ? { id: match.id } : null
+}
+
+async function findCredentialByNameInOrg(
+  name: string,
+  orgId: number,
+  credentialType: number,
+): Promise<{ id: number } | null> {
+  const { data } = await api.get(`/credentials/`, {
+    params: { name, organization: orgId, credential_type: credentialType },
+  })
+  const match = (data.results as Array<{ id: number; name: string }> | undefined)?.find(
+    (c) => c.name === name,
+  )
+  return match ? { id: match.id } : null
+}
+
 const steps: WizardStep<Ctx>[] = [
   {
     id: 'org',
@@ -113,16 +163,14 @@ const steps: WizardStep<Ctx>[] = [
       // Create org + project and wait for the SCM sync here (rather than
       // in onComplete) so the Job Template step below can populate its
       // playbook dropdown from the actual files in the repo.
-      const key = `${ctx.org_name}|${ctx.scm_url}`
+      const key = `${ctx.org_name}|${ctx.project_name}|${ctx.scm_url}`
       if (ctx._project_id && ctx._dirty_key === key) {
         // Already created for this exact input — skip and re-use. This
         // happens if the user hits Back then Next without edits.
         return
       }
-      // If a previous attempt created a project with different inputs,
-      // drop it so we do not leak. Org is harder to clean up since later
-      // resources reference it, so we just leave it — easy to delete
-      // from the UI afterwards.
+      // If a previous attempt created a project for different inputs,
+      // drop it so we do not leak.
       if (ctx._project_id) {
         try {
           await api.delete(`/projects/${ctx._project_id}/`)
@@ -130,25 +178,50 @@ const steps: WizardStep<Ctx>[] = [
           /* best effort cleanup */
         }
       }
+      // Idempotent org: reuse an existing one with the same name if it
+      // exists. AWX enforces unique organization names, so a second run
+      // of the wizard would otherwise 400 the moment the user picks a
+      // name they already have.
       let orgId = ctx._org_id
       if (!orgId) {
-        const { data: org } = await api.post('/organizations/', {
-          name: ctx.org_name,
-          description: '',
-        })
-        orgId = org.id as number
+        const existing = await findOrganizationByName(ctx.org_name)
+        if (existing) {
+          orgId = existing.id
+        } else {
+          const { data: org } = await api.post('/organizations/', {
+            name: ctx.org_name,
+            description: '',
+          })
+          orgId = org.id as number
+        }
       }
-      const { data: project } = await api.post('/projects/', {
-        name: ctx.project_name,
-        scm_type: 'git',
-        scm_url: ctx.scm_url,
-        organization: orgId,
-      })
-      await waitForProjectSync(project.id)
-      const playbooks = await fetchPlaybooks(project.id)
+      // Idempotent project: if a project with this name already exists
+      // inside the chosen org, reuse it provided the SCM URL still
+      // matches. Otherwise refuse and let the user pick a different
+      // name rather than silently swapping URLs underneath them.
+      let projectId: number
+      const existingProject = await findProjectByNameInOrg(ctx.project_name, orgId)
+      if (existingProject) {
+        if (existingProject.scm_url !== ctx.scm_url) {
+          return [
+            `A project named "${ctx.project_name}" already exists in "${ctx.org_name}" but points to a different SCM URL. Pick a different project name.`,
+          ]
+        }
+        projectId = existingProject.id
+      } else {
+        const { data: project } = await api.post('/projects/', {
+          name: ctx.project_name,
+          scm_type: 'git',
+          scm_url: ctx.scm_url,
+          organization: orgId,
+        })
+        projectId = project.id as number
+      }
+      await waitForProjectSync(projectId)
+      const playbooks = await fetchPlaybooks(projectId)
       setCtx({
         _org_id: orgId,
-        _project_id: project.id,
+        _project_id: projectId,
         _dirty_key: key,
         _playbooks: playbooks,
         // Reset any stale playbook selection so the dropdown starts
@@ -234,22 +307,50 @@ export function GettingStartedWizard() {
     if (!ctx._org_id || !ctx._project_id) {
       throw new Error('Project was not created yet — go back to the project step.')
     }
-    const { data: inventory } = await api.post('/inventories/', {
-      name: ctx.inventory_name,
-      organization: ctx._org_id,
-    })
-    const { data: credential } = await api.post('/credentials/', {
-      name: ctx.credential_name,
-      credential_type: 1,
-      organization: ctx._org_id,
-      inputs: { username: ctx.credential_username },
-    })
+    // Idempotent inventory / credential: AWX enforces
+    //   inventory:  unique (name, organization)
+    //   credential: unique (name, organization, credential_type)
+    // so a second run of the wizard with the same names otherwise 400s
+    // halfway through creation and leaves the system in a half-built
+    // state. Look them up first and re-use.
+    const CRED_TYPE_MACHINE = 1
+    let inventoryId: number
+    const existingInv = await findInventoryByNameInOrg(ctx.inventory_name, ctx._org_id)
+    if (existingInv) {
+      inventoryId = existingInv.id
+    } else {
+      const { data: inventory } = await api.post('/inventories/', {
+        name: ctx.inventory_name,
+        organization: ctx._org_id,
+      })
+      inventoryId = inventory.id as number
+    }
+    let credentialId: number
+    const existingCred = await findCredentialByNameInOrg(
+      ctx.credential_name,
+      ctx._org_id,
+      CRED_TYPE_MACHINE,
+    )
+    if (existingCred) {
+      credentialId = existingCred.id
+    } else {
+      const { data: credential } = await api.post('/credentials/', {
+        name: ctx.credential_name,
+        credential_type: CRED_TYPE_MACHINE,
+        organization: ctx._org_id,
+        inputs: { username: ctx.credential_username },
+      })
+      credentialId = credential.id as number
+    }
+    // Job templates do not have a unique-name constraint in AWX, so we
+    // always create a fresh one and accept that rerunning the wizard
+    // with the same template name will produce duplicates.
     await api.post('/job_templates/', {
       name: ctx.jt_name,
       playbook: ctx.playbook,
       project: ctx._project_id,
-      inventory: inventory.id,
-      credentials: [credential.id],
+      inventory: inventoryId,
+      credentials: [credentialId],
     })
     const settingsPatch: Record<string, boolean> = {}
     if (ctx.gate_scanning) settingsPatch.SCANNING_ENABLED = true

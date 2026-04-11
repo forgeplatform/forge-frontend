@@ -1,4 +1,5 @@
 import { useReducer, useCallback } from 'react'
+import { extractApiError } from '@/api/client'
 import type { WizardStep } from './types'
 
 interface State<TCtx> {
@@ -104,8 +105,7 @@ export function useWizardState<TCtx>(
           return false
         }
       } catch (e) {
-        const msg = e instanceof Error ? e.message : String(e)
-        dispatch({ type: 'SET_ERRORS', errors: [msg] })
+        dispatch({ type: 'SET_ERRORS', errors: [extractApiError(e)] })
         dispatch({ type: 'ADVANCE_END' })
         return false
       }
@@ -127,8 +127,7 @@ export function useWizardState<TCtx>(
         dispatch({ type: 'SUBMIT_SUCCESS' })
         return true
       } catch (e) {
-        const msg = e instanceof Error ? e.message : String(e)
-        dispatch({ type: 'SUBMIT_ERROR', error: msg })
+        dispatch({ type: 'SUBMIT_ERROR', error: extractApiError(e) })
         return false
       }
     },
