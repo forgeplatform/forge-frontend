@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { Building2, Plus, Loader2, Pencil, Trash, Eye } from 'lucide-react'
+import { Building2, Plus, Loader2, Pencil, Trash, Eye, Wand2 } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { DataTablePagination } from '@/components/ui/data-table-pagination'
@@ -77,11 +77,18 @@ export function Tenants() {
             Provision and manage tenants, quotas and branding.
           </p>
         </div>
-        <Link to="/tenants/new">
-          <Button>
-            <Plus className="mr-1 h-4 w-4" /> {t('tenants.new')}
-          </Button>
-        </Link>
+        <div className="flex gap-2">
+          <Link to="/wizards/tenancy">
+            <Button variant="outline">
+              <Wand2 className="mr-1 h-4 w-4" /> {t('wizards.title')}
+            </Button>
+          </Link>
+          <Link to="/tenants/new">
+            <Button>
+              <Plus className="mr-1 h-4 w-4" /> {t('tenants.new')}
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {isLoading ? (
