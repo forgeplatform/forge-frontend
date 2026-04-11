@@ -47,7 +47,7 @@ const columns = [
     header: 'Name',
     cell: (info) => (
       <Link
-        to={`/jobs/${info.row.original.id}`}
+        to={`/jobs/${info.row.original.id}?type=${info.row.original.type}`}
         className="font-medium text-primary hover:underline"
       >
         {info.getValue()}

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useParams, useNavigate, Link } from 'react-router-dom'
+import { useParams, useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { ArrowLeft, RotateCcw, Ban } from 'lucide-react'
 import { DetailPageSkeleton } from '@/components/skeletons/DetailPageSkeleton'
 import { Badge } from '@/components/ui/badge'
@@ -11,6 +11,8 @@ import {
   useCancelJob,
   useRelaunchJob,
   isJobActive,
+  jobTypeHasHosts,
+  jobTypeCanRelaunch,
 } from '@/api/hooks/useJobDetail'
 import { statusConfig } from '@/lib/statusConfig'
 import { formatRelativeTime, formatDuration } from '@/lib/utils'
@@ -22,20 +24,24 @@ type Tab = 'output' | 'details'
 
 export function JobDetail() {
   const { id } = useParams<{ id: string }>()
+  const [searchParams] = useSearchParams()
+  const jobType = searchParams.get('type')
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState<Tab>('output')
 
-  const { data: job, isLoading } = useJobDetail(id!)
+  const { data: job, isLoading } = useJobDetail(id!, jobType)
   const active = job ? isJobActive(job.status) : false
-  const { data: stdout, isLoading: stdoutLoading } = useJobStdout(id!, activeTab === 'output')
-  const { data: hostSummaries } = useJobHostSummaries(id!)
-  const cancelJob = useCancelJob(id!)
-  const relaunchJob = useRelaunchJob(id!)
+  const { data: stdout, isLoading: stdoutLoading } = useJobStdout(id!, activeTab === 'output', jobType)
+  const { data: hostSummaries } = useJobHostSummaries(id!, jobType)
+  const cancelJob = useCancelJob(id!, jobType)
+  const relaunchJob = useRelaunchJob(id!, jobType)
+  const showHosts = jobTypeHasHosts(jobType)
+  const canRelaunch = jobTypeCanRelaunch(jobType)
 
   const handleRelaunch = () => {
     relaunchJob.mutate(undefined, {
       onSuccess: (data) => {
-        navigate(`/jobs/${data.id}`)
+        navigate(`/jobs/${data.id}${jobType ? `?type=${jobType}` : ''}`)
       },
     })
   }
@@ -101,21 +107,23 @@ export function JobDetail() {
                 Cancel
               </Button>
             )}
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleRelaunch}
-              disabled={relaunchJob.isPending}
-            >
-              <RotateCcw className="mr-1 h-4 w-4" />
-              Relaunch
-            </Button>
+            {canRelaunch && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleRelaunch}
+                disabled={relaunchJob.isPending}
+              >
+                <RotateCcw className="mr-1 h-4 w-4" />
+                Relaunch
+              </Button>
+            )}
           </div>
         </div>
       </div>
 
       {/* Host Summary Bar */}
-      {hostSummaries && hostSummaries.results.length > 0 && (
+      {showHosts && hostSummaries && hostSummaries.results.length > 0 && (
         <HostSummaryBar summaries={hostSummaries.results} />
       )}
 
