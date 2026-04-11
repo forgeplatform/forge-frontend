@@ -3,6 +3,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
+import { Select } from '@/components/ui/select'
 
 interface FieldProps {
   label: string
@@ -58,6 +59,40 @@ export function TextAreaField({ label, value, onChange, placeholder, hint, rows 
         rows={rows}
         value={value}
         placeholder={placeholder}
+        onChange={(e) => onChange(e.target.value)}
+      />
+    </Field>
+  )
+}
+
+interface SelectFieldProps {
+  label: string
+  value: string
+  onChange: (v: string) => void
+  options: { value: string; label: string }[]
+  placeholder?: string
+  disabled?: boolean
+  hint?: string
+}
+
+export function SelectField({
+  label,
+  value,
+  onChange,
+  options,
+  placeholder,
+  disabled,
+  hint,
+}: SelectFieldProps) {
+  const optionsWithPlaceholder = placeholder
+    ? [{ value: '', label: placeholder }, ...options]
+    : options
+  return (
+    <Field label={label} hint={hint}>
+      <Select
+        value={value}
+        disabled={disabled}
+        options={optionsWithPlaceholder}
         onChange={(e) => onChange(e.target.value)}
       />
     </Field>

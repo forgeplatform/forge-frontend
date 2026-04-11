@@ -6,6 +6,7 @@ interface State<TCtx> {
   ctx: TCtx
   errors: string[]
   isSubmitting: boolean
+  isAdvancing: boolean
   submitError: string | null
   partialResults: Record<string, unknown>
 }
@@ -16,6 +17,8 @@ type Action<TCtx> =
   | { type: 'NEXT' }
   | { type: 'BACK' }
   | { type: 'SET_ERRORS'; errors: string[] }
+  | { type: 'ADVANCE_START' }
+  | { type: 'ADVANCE_END' }
   | { type: 'SUBMIT_START' }
   | { type: 'SUBMIT_ERROR'; error: string }
   | { type: 'SUBMIT_SUCCESS' }
@@ -33,6 +36,10 @@ function reducer<TCtx>(state: State<TCtx>, action: Action<TCtx>): State<TCtx> {
       return { ...state, currentStep: Math.max(0, state.currentStep - 1), errors: [] }
     case 'SET_ERRORS':
       return { ...state, errors: action.errors }
+    case 'ADVANCE_START':
+      return { ...state, isAdvancing: true, errors: [] }
+    case 'ADVANCE_END':
+      return { ...state, isAdvancing: false }
     case 'SUBMIT_START':
       return { ...state, isSubmitting: true, submitError: null }
     case 'SUBMIT_ERROR':
@@ -55,6 +62,7 @@ export function useWizardState<TCtx>(
     ctx: initialContext,
     errors: [],
     isSubmitting: false,
+    isAdvancing: false,
     submitError: null,
     partialResults: {},
   } as State<TCtx>)
@@ -78,12 +86,30 @@ export function useWizardState<TCtx>(
     return errs.length === 0
   }, [state.currentStep, state.ctx, steps])
 
-  const next = useCallback(() => {
+  const next = useCallback(async () => {
     const step = steps[state.currentStep]
     const errs = step?.validate ? step.validate(state.ctx) : []
     if (errs.length > 0) {
       dispatch({ type: 'SET_ERRORS', errors: errs })
       return false
+    }
+    if (step?.onNext) {
+      dispatch({ type: 'ADVANCE_START' })
+      try {
+        const hookSetCtx = (patch: Partial<TCtx>) => dispatch({ type: 'SET_CTX', patch })
+        const result = await step.onNext(state.ctx, hookSetCtx)
+        if (Array.isArray(result) && result.length > 0) {
+          dispatch({ type: 'SET_ERRORS', errors: result })
+          dispatch({ type: 'ADVANCE_END' })
+          return false
+        }
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e)
+        dispatch({ type: 'SET_ERRORS', errors: [msg] })
+        dispatch({ type: 'ADVANCE_END' })
+        return false
+      }
+      dispatch({ type: 'ADVANCE_END' })
     }
     dispatch({ type: 'NEXT' })
     return true
@@ -120,6 +146,7 @@ export function useWizardState<TCtx>(
     validate,
     submit,
     isSubmitting: state.isSubmitting,
+    isAdvancing: state.isAdvancing,
     submitError: state.submitError,
     partialResults: state.partialResults,
   }

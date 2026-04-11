@@ -37,6 +37,7 @@ export function Wizard<TCtx>({
     errors,
     submit,
     isSubmitting,
+    isAdvancing,
     submitError,
   } = useWizardState(initialContext, allSteps)
 
@@ -96,24 +97,27 @@ export function Wizard<TCtx>({
           </Card>
 
           <div className="flex items-center justify-between">
-            <Button variant="ghost" onClick={onCancel} disabled={isSubmitting}>
+            <Button variant="ghost" onClick={onCancel} disabled={isSubmitting || isAdvancing}>
               {t('wizards.cancel')}
             </Button>
             <div className="flex gap-2">
               <Button
                 variant="outline"
                 onClick={back}
-                disabled={currentStep === 0 || isSubmitting}
+                disabled={currentStep === 0 || isSubmitting || isAdvancing}
               >
                 {t('wizards.back')}
               </Button>
               {isLast ? (
-                <Button onClick={handleComplete} disabled={isSubmitting}>
+                <Button onClick={handleComplete} disabled={isSubmitting || isAdvancing}>
                   {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   {completeButtonLabel ?? t('wizards.create_all')}
                 </Button>
               ) : (
-                <Button onClick={next}>{t('wizards.next')}</Button>
+                <Button onClick={next} disabled={isAdvancing}>
+                  {isAdvancing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {t('wizards.next')}
+                </Button>
               )}
             </div>
           </div>
