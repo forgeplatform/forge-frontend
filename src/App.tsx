@@ -87,6 +87,13 @@ import { Tenants } from '@/pages/Tenants'
 import { TenantForm } from '@/pages/TenantForm'
 import { TenantDetail } from '@/pages/TenantDetail'
 import { TenantQuotaEvents } from '@/pages/TenantQuotaEvents'
+import { GettingStartedWizard } from '@/pages/wizards/GettingStartedWizard'
+import { AutomationWizard } from '@/pages/wizards/AutomationWizard'
+import { SelfServiceWizard } from '@/pages/wizards/SelfServiceWizard'
+import { TenancyWizard } from '@/pages/wizards/TenancyWizard'
+import { ComplianceWizard } from '@/pages/wizards/ComplianceWizard'
+import { ResourcesWizard } from '@/pages/wizards/ResourcesWizard'
+import { AccessWizard } from '@/pages/wizards/AccessWizard'
 import { useEffect } from 'react'
 
 function AuthenticatedRoutes() {
@@ -220,6 +227,15 @@ function AuthenticatedRoutes() {
         <Route path="/tenants/:id/edit" element={<TenantForm />} />
         <Route path="/tenants/:id" element={<TenantDetail />} />
         <Route path="/tenant_quota_events" element={<TenantQuotaEvents />} />
+
+        {/* Wizards */}
+        <Route path="/wizards/getting-started" element={<GettingStartedWizard />} />
+        <Route path="/wizards/automation" element={<AutomationWizard />} />
+        <Route path="/wizards/self-service" element={<SelfServiceWizard />} />
+        <Route path="/wizards/tenancy" element={<TenancyWizard />} />
+        <Route path="/wizards/compliance" element={<ComplianceWizard />} />
+        <Route path="/wizards/resources" element={<ResourcesWizard />} />
+        <Route path="/wizards/access" element={<AccessWizard />} />
 
         <Route path="/settings" element={<Settings />} />
         <Route path="/settings/:slug" element={<SettingsCategory />} />
