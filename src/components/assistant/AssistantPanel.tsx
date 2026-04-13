@@ -1,15 +1,13 @@
 import { useState, useRef, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { MessageCircle, X, Send, Square, Trash2, Loader2 } from 'lucide-react'
+import { MessageCircle, X, Send, Square, Minus, Maximize2, Minimize2, Info, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { useAssistant, useAssistantHealth } from '@/api/hooks/useAssistant'
 
 function MarkdownContent({ content }: { content: string }) {
-  // Simple markdown rendering: code blocks, bold, inline code
   const html = content
-    .replace(/```(\w*)\n([\s\S]*?)```/g, '<pre class="my-2 rounded bg-muted p-2 text-xs overflow-auto"><code>$2</code></pre>')
-    .replace(/`([^`]+)`/g, '<code class="rounded bg-muted px-1 py-0.5 text-xs">$1</code>')
+    .replace(/```(\w*)\n([\s\S]*?)```/g, '<pre class="my-2 rounded bg-slate-100 dark:bg-slate-800 p-2 text-xs overflow-auto"><code>$2</code></pre>')
+    .replace(/`([^`]+)`/g, '<code class="rounded bg-slate-100 dark:bg-slate-800 px-1 py-0.5 text-xs">$1</code>')
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
     .replace(/\*([^*]+)\*/g, '<em>$1</em>')
     .replace(/\n/g, '<br/>')
@@ -17,18 +15,34 @@ function MarkdownContent({ content }: { content: string }) {
   return <div className="text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: html }} />
 }
 
+function formatTime(date: Date): string {
+  return date.toLocaleDateString('sr-RS', {
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+  }) + ', ' + date.toLocaleTimeString('sr-RS', {
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+}
+
+const WELCOME_MESSAGE = `Zdravo! Ja sam Forge Assistant, vaš AI asistent!
+Ovde sam da vam pomognem da pronađete sve što vam treba. Samo mi recite šta tražite i tu sam za vas!
+*Napomena: Ja sam AI asistent, pa ponekad mogu da pogrešim. Slobodno me pitajte ponovo ako vam nešto nije jasno. Nikada ne delite lične ili osetljive podatke u razgovoru.*`
+
 export function AssistantPanel() {
   const [open, setOpen] = useState(false)
+  const [minimized, setMinimized] = useState(false)
+  const [expanded, setExpanded] = useState(false)
   const [input, setInput] = useState('')
   const scrollRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const location = useLocation()
 
   const { data: health } = useAssistantHealth()
-  const { messages, sendMessage, isStreaming, stop, clear } = useAssistant()
+  const { messages, sendMessage, isStreaming, stop } = useAssistant()
 
-  // Don't render if assistant is not available
-  if (!health || health.status === 'degraded' && !health.ollama) {
+  if (!health || !health.ollama) {
     return null
   }
 
@@ -39,107 +53,187 @@ export function AssistantPanel() {
     sendMessage(text, location.pathname)
   }
 
-  // Auto-scroll to bottom
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
   }, [messages])
 
-  // Focus input when panel opens
   useEffect(() => {
-    if (open) inputRef.current?.focus()
-  }, [open])
+    if (open && !minimized) inputRef.current?.focus()
+  }, [open, minimized])
 
+  // Floating button
   if (!open) {
     return (
-      <Button
+      <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-6 right-6 z-50 h-12 w-12 rounded-full shadow-lg"
-        size="icon"
-        title="Open AI Assistant"
+        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-110 active:scale-95"
+        title="Forge Assistant"
       >
-        <MessageCircle className="h-5 w-5" />
-      </Button>
+        <MessageCircle className="h-6 w-6" />
+      </button>
     )
   }
 
+  const panelWidth = expanded ? 'w-[600px]' : 'w-[380px]'
+  const panelHeight = expanded ? 'h-[700px]' : 'h-[520px]'
+
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex h-[500px] w-[380px] flex-col rounded-lg border bg-background shadow-xl">
+    <div className={`fixed bottom-6 right-6 z-50 flex flex-col ${panelWidth} ${minimized ? 'h-auto' : panelHeight} rounded-xl border border-border/50 bg-background shadow-2xl transition-all duration-200`}>
       {/* Header */}
-      <div className="flex items-center justify-between border-b px-4 py-3">
+      <div className="flex items-center justify-between rounded-t-xl border-b bg-muted/30 px-4 py-2.5">
         <div className="flex items-center gap-2">
-          <MessageCircle className="h-4 w-4 text-primary" />
-          <span className="text-sm font-medium">Forge Assistant</span>
-          <span className="text-[10px] text-muted-foreground">{health.model}</span>
+          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary">
+            <MessageCircle className="h-3.5 w-3.5 text-primary-foreground" />
+          </div>
+          <span className="text-sm font-semibold">Forge Assistant</span>
+          <button
+            onClick={() => {}}
+            className="text-muted-foreground hover:text-foreground"
+            title="Info"
+          >
+            <Info className="h-3.5 w-3.5" />
+          </button>
         </div>
-        <div className="flex gap-1">
-          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={clear} title="Clear chat">
-            <Trash2 className="h-3.5 w-3.5" />
+        <div className="flex items-center gap-0.5">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7 text-muted-foreground hover:text-foreground"
+            onClick={() => setMinimized(!minimized)}
+            title={minimized ? 'Expand' : 'Minimize'}
+          >
+            <Minus className="h-3.5 w-3.5" />
           </Button>
-          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setOpen(false)} title="Close">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7 text-muted-foreground hover:text-foreground"
+            onClick={() => setExpanded(!expanded)}
+            title={expanded ? 'Smaller' : 'Larger'}
+          >
+            {expanded ? <Minimize2 className="h-3.5 w-3.5" /> : <Maximize2 className="h-3.5 w-3.5" />}
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7 text-muted-foreground hover:text-foreground"
+            onClick={() => { setOpen(false); setMinimized(false) }}
+            title="Close"
+          >
             <X className="h-3.5 w-3.5" />
           </Button>
         </div>
       </div>
 
-      {/* Messages */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
-        {messages.length === 0 && (
-          <div className="flex h-full items-center justify-center text-center text-sm text-muted-foreground">
-            <div>
-              <MessageCircle className="mx-auto mb-2 h-8 w-8 opacity-50" />
-              <p>Ask me anything about Forge.</p>
-              <p className="text-xs mt-1">I can help with templates, inventories, credentials, jobs, and more.</p>
-            </div>
-          </div>
-        )}
-        {messages.map((msg, i) => (
-          <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-            <div className={`max-w-[85%] rounded-lg px-3 py-2 ${
-              msg.role === 'user'
-                ? 'bg-primary text-primary-foreground'
-                : 'bg-muted'
-            }`}>
-              {msg.role === 'assistant' ? (
-                msg.content ? (
-                  <MarkdownContent content={msg.content} />
-                ) : (
-                  <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
-                )
-              ) : (
-                <p className="text-sm">{msg.content}</p>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
+      {!minimized && (
+        <>
+          {/* Messages */}
+          <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
+            {/* Welcome message (always shown) */}
+            {messages.length === 0 && (
+              <div className="flex flex-col items-center">
+                <div className="mb-4 text-center text-sm font-semibold text-foreground">
+                  Forge Assistant
+                </div>
+                <div className="flex items-end gap-2 w-full">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary">
+                    <MessageCircle className="h-4 w-4 text-primary-foreground" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="rounded-xl rounded-bl-sm bg-muted px-4 py-3">
+                      <MarkdownContent content={WELCOME_MESSAGE} />
+                    </div>
+                    <div className="mt-1 flex items-center justify-between px-1">
+                      <span className="text-[10px] text-muted-foreground">Forge Assistant</span>
+                      <span className="text-[10px] text-muted-foreground">{formatTime(new Date())}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
 
-      {/* Input */}
-      <div className="border-t px-3 py-2">
-        <form
-          onSubmit={(e) => { e.preventDefault(); handleSend() }}
-          className="flex gap-2"
-        >
-          <Input
-            ref={inputRef}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask anything..."
-            disabled={isStreaming}
-            className="text-sm"
-          />
-          {isStreaming ? (
-            <Button type="button" size="icon" variant="outline" onClick={stop} title="Stop">
-              <Square className="h-4 w-4" />
-            </Button>
-          ) : (
-            <Button type="submit" size="icon" disabled={!input.trim()} title="Send">
-              <Send className="h-4 w-4" />
-            </Button>
-          )}
-        </form>
-      </div>
+            {/* Chat messages */}
+            {messages.map((msg, i) => (
+              <div key={i} className={`flex items-end gap-2 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
+                {msg.role === 'assistant' && (
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary">
+                    <MessageCircle className="h-4 w-4 text-primary-foreground" />
+                  </div>
+                )}
+                <div className={`max-w-[80%] ${msg.role === 'user' ? '' : ''}`}>
+                  <div className={`rounded-xl px-4 py-3 ${
+                    msg.role === 'user'
+                      ? 'rounded-br-sm bg-primary text-primary-foreground'
+                      : 'rounded-bl-sm bg-muted'
+                  }`}>
+                    {msg.role === 'assistant' ? (
+                      msg.content ? (
+                        <MarkdownContent content={msg.content} />
+                      ) : (
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          <span>Razmišljam...</span>
+                        </div>
+                      )
+                    ) : (
+                      <p className="text-sm">{msg.content}</p>
+                    )}
+                  </div>
+                  <div className={`mt-1 flex px-1 ${msg.role === 'user' ? 'justify-end' : 'justify-between'}`}>
+                    <span className="text-[10px] text-muted-foreground">
+                      {msg.role === 'user' ? 'Vi' : 'Forge Assistant'}
+                    </span>
+                    {msg.role === 'assistant' && (
+                      <span className="text-[10px] text-muted-foreground">{formatTime(new Date())}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Input */}
+          <div className="border-t px-4 py-3">
+            <form
+              onSubmit={(e) => { e.preventDefault(); handleSend() }}
+              className="relative"
+            >
+              <input
+                ref={inputRef}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Pitajte me bilo šta..."
+                disabled={isStreaming}
+                className="w-full rounded-full border border-border bg-muted/30 py-2.5 pl-4 pr-12 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-1 focus:ring-primary disabled:opacity-50"
+              />
+              {isStreaming ? (
+                <button
+                  type="button"
+                  onClick={stop}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-destructive text-destructive-foreground transition-colors hover:bg-destructive/90"
+                  title="Stop"
+                >
+                  <Square className="h-3.5 w-3.5" />
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  disabled={!input.trim()}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-30"
+                  title="Pošalji"
+                >
+                  <Send className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </form>
+            <div className="mt-2 text-center text-[10px] text-muted-foreground">
+              Powered by Forge Platform
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }

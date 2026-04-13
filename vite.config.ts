@@ -47,6 +47,11 @@ export default defineConfig(({ command }) => ({
         changeOrigin: true,
         secure: false,
       },
+      '/assistant': {
+        target: 'http://localhost:8100',
+        changeOrigin: true,
+        rewrite: (path: string) => path.replace(/^\/assistant/, ''),
+      },
       '/sso': {
         target: 'http://localhost:8013',
         changeOrigin: true,

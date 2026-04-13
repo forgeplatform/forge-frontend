@@ -148,7 +148,7 @@ describe('Route completeness', () => {
 })
 
 describe('Route patterns', () => {
-  const routePaths = [...APP_SOURCE.matchAll(/path="([^"]+)"/g)].map((m) => m[1])
+  const routePaths = [...APP_SOURCE.matchAll(/path="([^"]+)"/g)].map((m) => m[1]!)
 
   it('all paths start with / or are wildcard', () => {
     for (const p of routePaths) {
@@ -172,7 +172,7 @@ describe('Route patterns', () => {
 
 describe('Page imports', () => {
   // Every import in App.tsx should correspond to a real file
-  const imports = [...APP_SOURCE.matchAll(/from\s+'(@\/[^']+)'/g)].map((m) => m[1])
+  const imports = [...APP_SOURCE.matchAll(/from\s+'(@\/[^']+)'/g)].map((m) => m[1]!)
 
   it('has imports for all pages', () => {
     const pageImports = imports.filter((i) => i.includes('/pages/'))
