@@ -39,12 +39,9 @@ export function AssistantPanel() {
   const inputRef = useRef<HTMLInputElement>(null)
   const location = useLocation()
 
-  const { data: health } = useAssistantHealth()
+  useAssistantHealth() // warm the cache for health status
   const { messages, sendMessage, isStreaming, stop } = useAssistant()
 
-  if (!health || !health.ollama) {
-    return null
-  }
 
   const handleSend = () => {
     const text = input.trim()

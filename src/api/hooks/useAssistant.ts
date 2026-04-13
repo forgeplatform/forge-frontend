@@ -24,9 +24,10 @@ export function useAssistantHealth() {
       if (!resp.ok) throw new Error('Assistant unavailable')
       return resp.json()
     },
-    retry: false,
-    refetchInterval: 60000, // Check every minute
-    staleTime: 30000,
+    retry: 3,
+    retryDelay: 5000,
+    refetchInterval: 30000,
+    staleTime: 15000,
   })
 }
 
