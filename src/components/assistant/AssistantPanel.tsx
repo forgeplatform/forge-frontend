@@ -16,19 +16,19 @@ function MarkdownContent({ content }: { content: string }) {
 }
 
 function formatTime(date: Date): string {
-  return date.toLocaleDateString('sr-RS', {
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
     day: 'numeric',
-    month: 'numeric',
     year: 'numeric',
-  }) + ', ' + date.toLocaleTimeString('sr-RS', {
+  }) + ', ' + date.toLocaleTimeString('en-US', {
     hour: '2-digit',
     minute: '2-digit',
   })
 }
 
-const WELCOME_MESSAGE = `Zdravo! Ja sam Forge Assistant, vaš AI asistent!
-Ovde sam da vam pomognem da pronađete sve što vam treba. Samo mi recite šta tražite i tu sam za vas!
-*Napomena: Ja sam AI asistent, pa ponekad mogu da pogrešim. Slobodno me pitajte ponovo ako vam nešto nije jasno. Nikada ne delite lične ili osetljive podatke u razgovoru.*`
+const WELCOME_MESSAGE = `Hi! I'm Forge Assistant, your AI helper!
+I'm here to help you find everything you need. Just tell me what you're looking for and I'll do my best to assist you!
+*Note: I'm an AI assistant, so I may occasionally make mistakes. Feel free to ask again if something isn't clear. Never share personal or sensitive information in the conversation.*`
 
 export function AssistantPanel() {
   const [open, setOpen] = useState(false)
@@ -174,7 +174,7 @@ export function AssistantPanel() {
                       ) : (
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <Loader2 className="h-4 w-4 animate-spin" />
-                          <span>Razmišljam...</span>
+                          <span>Thinking...</span>
                         </div>
                       )
                     ) : (
@@ -183,7 +183,7 @@ export function AssistantPanel() {
                   </div>
                   <div className={`mt-1 flex px-1 ${msg.role === 'user' ? 'justify-end' : 'justify-between'}`}>
                     <span className="text-[10px] text-muted-foreground">
-                      {msg.role === 'user' ? 'Vi' : 'Forge Assistant'}
+                      {msg.role === 'user' ? 'You' : 'Forge Assistant'}
                     </span>
                     {msg.role === 'assistant' && (
                       <span className="text-[10px] text-muted-foreground">{formatTime(new Date())}</span>
@@ -204,7 +204,7 @@ export function AssistantPanel() {
                 ref={inputRef}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Pitajte me bilo šta..."
+                placeholder="Ask me anything..."
                 disabled={isStreaming}
                 className="w-full rounded-full border border-border bg-muted/30 py-2.5 pl-4 pr-12 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-1 focus:ring-primary disabled:opacity-50"
               />
@@ -222,7 +222,7 @@ export function AssistantPanel() {
                   type="submit"
                   disabled={!input.trim()}
                   className="absolute right-2 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-30"
-                  title="Pošalji"
+                  title="Send"
                 >
                   <Send className="h-3.5 w-3.5" />
                 </button>
