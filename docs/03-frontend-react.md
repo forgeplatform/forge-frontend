@@ -1,7 +1,7 @@
 # 03 — Frontend (React)
 
 The Forge frontend is a React 18 SPA (Single Page Application) with TypeScript,
-Vite, and Tailwind CSS. It lives in `forge/ui_next/`.
+Vite, and Tailwind CSS. It lives in the `forge-frontend` repository.
 
 ---
 
@@ -27,7 +27,7 @@ Vite, and Tailwind CSS. It lives in `forge/ui_next/`.
 ## Project Structure
 
 ```
-forge/ui_next/
+forge-frontend/
 ├── package.json            # Dependencies and scripts
 ├── vite.config.ts          # Dev server, build, proxy
 ├── tsconfig.json           # TypeScript configuration (strict mode)
@@ -78,7 +78,7 @@ forge/ui_next/
 ### Starting the dev server
 
 ```bash
-cd forge/ui_next
+cd forge-frontend
 npm ci            # install dependencies
 npm run dev       # dev server at http://localhost:5173
 ```
@@ -87,12 +87,13 @@ The dev server automatically proxies API requests to the Django backend:
 - `/api/*` → `http://localhost:8013`
 - `/sso/*` → `http://localhost:8013`
 - `/websocket/*` → `ws://localhost:8013`
+- `/assistant/*` → `http://localhost:8100` (Forge Assistant AI service)
 
 ### Production build
 
 ```bash
 npm run build
-# Output: forge/ui_next/build/forge/
+# Output: build/forge/
 # - index_forge.html (renamed from index.html)
 # - assets/ (JS, CSS chunks)
 ```
@@ -179,6 +180,47 @@ Each page corresponds to one route. They follow the pattern:
 | `CodeEditor` | Monaco editor (lazy-loaded) | Extra vars, variables editing |
 | `RBACPanel` | Role assignment UI | Assigning permissions to users/teams |
 | `AuditLog` | Immutable security audit log with filters, expandable rows, CSV export | `/audit` route — credential access, auth events, permission changes |
+| `AssistantPanel` | Floating AI chat panel with SSE streaming, page context awareness | Always visible (bottom-right button) when forge-assistant service is healthy |
+| `RecommendationsPanel` | Rule-based actionable suggestions for the current page | Dashboard and wizard pages |
+| `ServiceRequestDialog` | Self-service catalog request form with approval workflow | Service portal pages |
+| `SurveyQuestionInput` | Dynamic survey question renderer (supports db query, API, Jinja2 choices) | Launch dialogs when `survey_enabled` is true |
+
+### AI Assistant (`components/assistant/`)
+
+The `AssistantPanel` is a floating chat component that connects to the Forge Assistant
+microservice (port 8100) via Server-Sent Events (SSE). It sends the current page context
+(route path) alongside user messages so the AI can provide contextual answers.
+
+- **API hook:** `src/api/hooks/useAssistant.ts`
+- **Detection:** The frontend polls `/assistant/api/v1/health` on mount. If the endpoint
+  responds, the chat button appears. If forge-assistant is not deployed, no UI is shown.
+- **Proxy:** In development, Vite proxies `/assistant/*` to `http://localhost:8100` with
+  path rewrite (`/assistant/api/...` → `/api/...`).
+
+### Wizards (`components/wizard/`)
+
+A guided setup system with 7 specialized wizards:
+
+| Wizard | Purpose |
+|--------|---------|
+| `GettingStartedWizard` | Initial platform setup (credentials, project, inventory, template) |
+| `AutomationWizard` | Create a complete automation from scratch |
+| `SelfServiceWizard` | Publish a template to the self-service catalog |
+| `ResourcesWizard` | Bulk create projects, inventories, credentials |
+| `AccessWizard` | Set up users, teams, and RBAC permissions |
+| `TenancyWizard` | Configure multi-tenant organizations with quotas and branding |
+| `ComplianceWizard` | Set up drift detection, policies, and scanners |
+
+The wizard framework (`Wizard.tsx`, `useWizardState.ts`, `fields.tsx`, `ReviewStep.tsx`,
+`StepIndicator.tsx`) provides a multi-step form with validation, navigation, and a
+final review step before submission.
+
+### Recommendations (`components/wizard/RecommendationsPanel.tsx`)
+
+Displays rule-based recommendations from the backend (`GET /api/v2/recommendations/`).
+The recommendations engine evaluates 12 built-in rules and suggests actionable
+improvements (e.g., "Enable SCM update on launch for Project X"). No database tables
+are needed — the engine is stateless and reads the current configuration to generate suggestions.
 
 ---
 
