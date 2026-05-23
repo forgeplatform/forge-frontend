@@ -67,12 +67,16 @@ VITE_API_URL=https://forge.example.com
 ## Docker
 
 ```bash
-docker build -t registry.cloudforyour.work/forge-platform/forge-frontend:latest .
+docker build -t ghcr.io/forgeplatform/forge-frontend:latest .
 ```
 
 The build generates static files in `dist/` which are served via Nginx.
 
 ## Related Repositories
 
-- [forge-backend](https://git.cloudforyour.work/forge-platform/forge-backend) — Django API
-- [forge-devops](https://git.cloudforyour.work/forge-platform/forge-devops) — Docker Compose, Nginx, CI/CD
+- [forge-backend](https://github.com/forgeplatform/forge-backend) — Django API
+- [forge-devops](https://github.com/forgeplatform/forge-devops) — Docker Compose, Nginx, CI/CD
+
+## License
+
+Licensed under the Apache License, Version 2.0. See [LICENSE](./LICENSE).
