@@ -1,5 +1,7 @@
 # Forge Frontend
 
+[![CI](https://github.com/forgeplatform/forge-frontend/actions/workflows/ci.yml/badge.svg)](https://github.com/forgeplatform/forge-frontend/actions/workflows/ci.yml)
+
 React UI for the Forge platform.
 
 ## Tech Stack
