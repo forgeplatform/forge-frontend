@@ -14,7 +14,7 @@ export function isJobActive(status: string): boolean {
 }
 
 /**
- * AWX exposes each unified-job subtype on its own REST collection; the
+ * The platform exposes each unified-job subtype on its own REST collection; the
  * /unified_jobs/ list returns all of them together but there is no
  * /unified_jobs/{id}/ detail endpoint. So when a row is clicked in the
  * Jobs page we carry the `type` in the query string and map it here to

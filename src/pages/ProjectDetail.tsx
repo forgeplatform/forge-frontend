@@ -153,7 +153,7 @@ export function ProjectDetail() {
               <DetailRow
                 label="Last Job"
                 value={`#${project.summary_fields.last_job.id}`}
-                // project.last_job in AWX is always a ProjectUpdate
+                // project.last_job is always a ProjectUpdate
                 // (the most recent SCM sync), not a playbook run.
                 link={`/jobs/${project.summary_fields.last_job.id}?type=project_update`}
               />

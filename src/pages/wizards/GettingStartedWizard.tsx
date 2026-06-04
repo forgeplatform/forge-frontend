@@ -22,7 +22,7 @@ interface Ctx {
   gate_observability: boolean
   gate_tenancy: boolean
   // Pre-created resources from step 1 onNext — reused in onComplete
-  // so we do not hit AWX twice. `_dirty_key` tracks the org_name +
+  // so we do not hit the API twice. `_dirty_key` tracks the org_name +
   // scm_url combination the existing project was made for; if the
   // user goes Back and edits it we delete and recreate.
   _org_id: number | null
@@ -202,7 +202,7 @@ const steps: WizardStep<Ctx>[] = [
         }
       }
       // Idempotent org: reuse an existing one with the same name if it
-      // exists. AWX enforces unique organization names, so a second run
+      // exists. The platform enforces unique organization names, so a second run
       // of the wizard would otherwise 400 the moment the user picks a
       // name they already have.
       let orgId = ctx._org_id
@@ -338,7 +338,7 @@ export function GettingStartedWizard() {
     if (!ctx._org_id || !ctx._project_id) {
       throw new Error('Project was not created yet — go back to the project step.')
     }
-    // Idempotent inventory / credential: AWX enforces
+    // Idempotent inventory / credential: the platform enforces
     //   inventory:  unique (name, organization)
     //   credential: unique (name, organization, credential_type)
     // so a second run of the wizard with the same names otherwise 400s
@@ -356,7 +356,7 @@ export function GettingStartedWizard() {
       })
       inventoryId = inventory.id as number
     }
-    // Build the Machine credential inputs. AWX's Machine credential
+    // Build the Machine credential inputs. The Machine credential
     // type accepts username, password, ssh_key_data (among others);
     // we only send what the user actually filled in to avoid
     // overwriting an empty string on top of a valid existing value if
@@ -386,7 +386,7 @@ export function GettingStartedWizard() {
       })
       credentialId = credential.id as number
     }
-    // Job templates do not have a unique-name constraint in AWX, so we
+    // Job templates do not have a unique-name constraint, so we
     // always create a fresh one and accept that rerunning the wizard
     // with the same template name will produce duplicates.
     await api.post('/job_templates/', {
