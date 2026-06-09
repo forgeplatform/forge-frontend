@@ -1,4 +1,4 @@
-### Forge Frontend — Production Dockerfile
+### Forail Frontend — Production Dockerfile
 ### Multi-stage: build with Node.js, serve with nginx
 
 # ── Stage 1: Build ─────────────────────────────────────────────────
@@ -19,13 +19,13 @@ FROM nginx:1.27-alpine
 RUN rm /etc/nginx/conf.d/default.conf
 
 # Copy custom nginx config
-COPY nginx.conf /etc/nginx/conf.d/forge.conf
+COPY nginx.conf /etc/nginx/conf.d/forail.conf
 
-# Copy built assets — Vite outputs to build/forge/ with base /static/forge/
-COPY --from=builder /app/build/forge /usr/share/nginx/html/static/forge
+# Copy built assets — Vite outputs to build/forail/ with base /static/forail/
+COPY --from=builder /app/build/forail /usr/share/nginx/html/static/forail
 
 # Also serve index at root for SPA routing
-COPY --from=builder /app/build/forge/index_forge.html /usr/share/nginx/html/index.html
+COPY --from=builder /app/build/forail/index_forail.html /usr/share/nginx/html/index.html
 
 EXPOSE 80
 

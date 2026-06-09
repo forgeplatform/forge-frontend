@@ -21,7 +21,7 @@ import type { PolicyAppliesTo, PolicyEnforcement, PolicyTestResponse } from '@/a
 
 const APPLIES: PolicyAppliesTo[] = ['job_template', 'workflow_job_template', 'ad_hoc_command']
 
-const REGO_PLACEHOLDER = `package forge.launch
+const REGO_PLACEHOLDER = `package forail.launch
 
 # Deny launches against the prod-web inventory after 18:00 UTC
 default deny := false
@@ -46,7 +46,7 @@ export function PolicyForm() {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [organization, setOrganization] = useState<string>('')
-  const [packagePath, setPackagePath] = useState('forge.launch')
+  const [packagePath, setPackagePath] = useState('forail.launch')
   const [enforcement, setEnforcement] = useState<PolicyEnforcement>('enforce')
   const [enabled, setEnabled] = useState(true)
   const [appliesTo, setAppliesTo] = useState<PolicyAppliesTo[]>([])
@@ -59,7 +59,7 @@ export function PolicyForm() {
       setName(existing.name)
       setDescription(existing.description || '')
       setOrganization(existing.organization ? String(existing.organization) : '')
-      setPackagePath(existing.package_path || 'forge.launch')
+      setPackagePath(existing.package_path || 'forail.launch')
       setEnforcement(existing.enforcement)
       setEnabled(existing.enabled)
       setAppliesTo(existing.applies_to || [])
@@ -157,7 +157,7 @@ export function PolicyForm() {
                 <Input
                   value={packagePath}
                   onChange={(e) => setPackagePath(e.target.value)}
-                  placeholder="forge.launch"
+                  placeholder="forail.launch"
                 />
               </div>
               <div className="space-y-2">

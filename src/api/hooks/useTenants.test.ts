@@ -38,13 +38,13 @@ describe('Tenant', () => {
         logo_url: 'https://acme.test/logo.svg',
         primary_color: '#112233',
         secondary_color: '#445566',
-        custom_domain: 'acme.forge.test',
+        custom_domain: 'acme.forail.test',
       },
       created: '2026-04-01T00:00:00Z',
       modified: '2026-04-09T00:00:00Z',
     }
     expect(t.quota.max_concurrent_jobs).toBe(10)
-    expect(t.branding.custom_domain).toBe('acme.forge.test')
+    expect(t.branding.custom_domain).toBe('acme.forail.test')
   })
 })
 

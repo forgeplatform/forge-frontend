@@ -30,7 +30,7 @@ function getWebSocketUrl(): string {
 }
 
 /**
- * Connects to Forge WebSocket for real-time job status updates.
+ * Connects to Forail WebSocket for real-time job status updates.
  * Automatically invalidates React Query caches when jobs change status.
  *
  * @param enabled - Whether the WebSocket should be connected

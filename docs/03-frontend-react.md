@@ -1,7 +1,7 @@
 # 03 — Frontend (React)
 
-The Forge frontend is a React 18 SPA (Single Page Application) with TypeScript,
-Vite, and Tailwind CSS. It lives in the `forge-frontend` repository.
+The Forail frontend is a React 18 SPA (Single Page Application) with TypeScript,
+Vite, and Tailwind CSS. It lives in the `forail-frontend` repository.
 
 ---
 
@@ -27,7 +27,7 @@ Vite, and Tailwind CSS. It lives in the `forge-frontend` repository.
 ## Project Structure
 
 ```
-forge-frontend/
+forail-frontend/
 ├── package.json            # Dependencies and scripts
 ├── vite.config.ts          # Dev server, build, proxy
 ├── tsconfig.json           # TypeScript configuration (strict mode)
@@ -78,7 +78,7 @@ forge-frontend/
 ### Starting the dev server
 
 ```bash
-cd forge-frontend
+cd forail-frontend
 npm ci            # install dependencies
 npm run dev       # dev server at http://localhost:5173
 ```
@@ -87,19 +87,19 @@ The dev server automatically proxies API requests to the Django backend:
 - `/api/*` → `http://localhost:8013`
 - `/sso/*` → `http://localhost:8013`
 - `/websocket/*` → `ws://localhost:8013`
-- `/assistant/*` → `http://localhost:8100` (Forge Assistant AI service)
+- `/assistant/*` → `http://localhost:8100` (Forail Assistant AI service)
 
 ### Production build
 
 ```bash
 npm run build
-# Output: build/forge/
-# - index_forge.html (renamed from index.html)
+# Output: build/forail/
+# - index_forail.html (renamed from index.html)
 # - assets/ (JS, CSS chunks)
 ```
 
-Django serves `index_forge.html` through `TemplateView`, and static assets
-from `/static/forge/assets/`.
+Django serves `index_forail.html` through `TemplateView`, and static assets
+from `/static/forail/assets/`.
 
 ### Lint and type-checking
 
@@ -180,20 +180,20 @@ Each page corresponds to one route. They follow the pattern:
 | `CodeEditor` | Monaco editor (lazy-loaded) | Extra vars, variables editing |
 | `RBACPanel` | Role assignment UI | Assigning permissions to users/teams |
 | `AuditLog` | Immutable security audit log with filters, expandable rows, CSV export | `/audit` route — credential access, auth events, permission changes |
-| `AssistantPanel` | Floating AI chat panel with SSE streaming, page context awareness | Always visible (bottom-right button) when forge-assistant service is healthy |
+| `AssistantPanel` | Floating AI chat panel with SSE streaming, page context awareness | Always visible (bottom-right button) when forail-assistant service is healthy |
 | `RecommendationsPanel` | Rule-based actionable suggestions for the current page | Dashboard and wizard pages |
 | `ServiceRequestDialog` | Self-service catalog request form with approval workflow | Service portal pages |
 | `SurveyQuestionInput` | Dynamic survey question renderer (supports db query, API, Jinja2 choices) | Launch dialogs when `survey_enabled` is true |
 
 ### AI Assistant (`components/assistant/`)
 
-The `AssistantPanel` is a floating chat component that connects to the Forge Assistant
+The `AssistantPanel` is a floating chat component that connects to the Forail Assistant
 microservice (port 8100) via Server-Sent Events (SSE). It sends the current page context
 (route path) alongside user messages so the AI can provide contextual answers.
 
 - **API hook:** `src/api/hooks/useAssistant.ts`
 - **Detection:** The frontend polls `/assistant/api/v1/health` on mount. If the endpoint
-  responds, the chat button appears. If forge-assistant is not deployed, no UI is shown.
+  responds, the chat button appears. If forail-assistant is not deployed, no UI is shown.
 - **Proxy:** In development, Vite proxies `/assistant/*` to `http://localhost:8100` with
   path rewrite (`/assistant/api/...` → `/api/...`).
 
@@ -229,7 +229,7 @@ are needed — the engine is stateless and reads the current configuration to ge
 CSS variables in `src/index.css` define colors for both themes. Dark mode is activated
 by adding the `dark` class to the `<html>` element.
 
-The theme is stored in localStorage under the key `forge-theme`.
+The theme is stored in localStorage under the key `forail-theme`.
 
 **Watch out:** When adding a new component, use semantic colors
 (`bg-background`, `text-foreground`, `border-border`) instead of hardcoded ones
@@ -313,7 +313,7 @@ The theme is stored in localStorage under the key `forge-theme`.
 
 Sidebar NEW group **Tenancy** above the Compliance group, with `Building2` (Tenants) and `Activity` (Quota Events) icons.
 
-**Boot-time branding** (`src/branding/applyBranding.ts`): called from `src/main.tsx` **before** React mounts. Reads localStorage for a cached `forge.branding` entry (TTL 5 min); on miss, fetches `/api/v2/branding/?host=${window.location.hostname}` with no auth / no credentials. On success, sets CSS variables `--forge-primary` and `--forge-secondary` on `:root`, updates the document title, and swaps the favicon. Cached for 5 minutes to keep cold-load under the fetch time. Tailwind exposes these CSS vars as `colors.brand.primary` / `colors.brand.secondary`. The branding endpoint is **public** on the backend so the skin applies before the login screen.
+**Boot-time branding** (`src/branding/applyBranding.ts`): called from `src/main.tsx` **before** React mounts. Reads localStorage for a cached `forail.branding` entry (TTL 5 min); on miss, fetches `/api/v2/branding/?host=${window.location.hostname}` with no auth / no credentials. On success, sets CSS variables `--forail-primary` and `--forail-secondary` on `:root`, updates the document title, and swaps the favicon. Cached for 5 minutes to keep cold-load under the fetch time. Tailwind exposes these CSS vars as `colors.brand.primary` / `colors.brand.secondary`. The branding endpoint is **public** on the backend so the skin applies before the login screen.
 
 # Self-Service Portal
 /service_portal                 Catalog browse (cards by category, request dialog)

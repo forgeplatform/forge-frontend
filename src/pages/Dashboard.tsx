@@ -69,7 +69,7 @@ function StatCard({ title, value, failed, icon: Icon, href }: StatCardProps) {
   )
 }
 
-const GETTING_STARTED_KEY = 'forge.dashboard.gettingStarted.dismissed'
+const GETTING_STARTED_KEY = 'forail.dashboard.gettingStarted.dismissed'
 
 const severityStyles: Record<RecommendationSeverity, string> = {
   critical: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300',

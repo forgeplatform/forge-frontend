@@ -35,7 +35,7 @@ We will credit you in the release notes unless you prefer to remain anonymous.
 
 In scope:
 
-- forge-frontend (this repository) — React UI, build artifacts
+- forail-frontend (this repository) — React UI, build artifacts
 - Cross-site scripting, injection through user-controlled data rendered in the UI
 - Client-side authentication and session handling
 

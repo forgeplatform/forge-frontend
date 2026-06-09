@@ -23,7 +23,7 @@ describe('Recommendation', () => {
       id: 'welcome',
       scope: 'dashboard',
       severity: 'info',
-      title: 'Welcome to Forge',
+      title: 'Welcome to Forail',
       why: 'Finish setup with the Getting Started wizard.',
       action_link: '/wizards/getting-started',
     }

@@ -26,7 +26,7 @@ export function ForcePasswordChange() {
       await api.patch(`/users/${user!.id}/`, { password })
     },
     onSuccess: () => {
-      localStorage.setItem(`forge_password_changed_${user!.id}`, 'true')
+      localStorage.setItem(`forail_password_changed_${user!.id}`, 'true')
       setSuccess(true)
       // Redirect to login after 3 seconds so user can log in with new password
       setTimeout(() => {
@@ -55,7 +55,7 @@ export function ForcePasswordChange() {
     <div className="flex min-h-full flex-col items-center justify-center bg-background px-4">
       <div className="mb-8 flex items-center gap-3">
         <Anvil className="h-10 w-10 text-primary" />
-        <h1 className="text-3xl font-bold tracking-tight">Forge</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Forail</h1>
       </div>
 
       <Card className="w-full max-w-sm">

@@ -27,7 +27,7 @@ export function useLogin() {
     mutationFn: async (credentials: { username: string; password: string }) => {
       // GET /api/login/ sets the csrftoken cookie
       await api.get('/login/', { baseURL: '/api' })
-      // POST form-urlencoded credentials (Forge requires this format)
+      // POST form-urlencoded credentials (Forail requires this format)
       const formData = new URLSearchParams()
       formData.append('username', credentials.username)
       formData.append('password', credentials.password)

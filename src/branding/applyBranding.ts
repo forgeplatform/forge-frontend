@@ -13,19 +13,19 @@ interface BrandingShape {
   contact_email?: string
 }
 
-const CACHE_KEY = 'forge.branding'
+const CACHE_KEY = 'forail.branding'
 const TTL_MS = 5 * 60 * 1000
 
 function apply(b: BrandingShape): void {
   if (!b) return
   if (b.primary_color) {
-    document.documentElement.style.setProperty('--forge-primary', b.primary_color)
+    document.documentElement.style.setProperty('--forail-primary', b.primary_color)
   }
   if (b.secondary_color) {
-    document.documentElement.style.setProperty('--forge-secondary', b.secondary_color)
+    document.documentElement.style.setProperty('--forail-secondary', b.secondary_color)
   }
   if (b.name) {
-    document.title = `${b.name} — Forge`
+    document.title = `${b.name} — Forail`
   }
   if (b.logo_url) {
     const link = document.querySelector("link[rel*='icon']") as HTMLLinkElement | null

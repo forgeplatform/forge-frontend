@@ -35,7 +35,7 @@ export function TopBar({ onMobileMenuToggle }: TopBarProps) {
   if (!pageTitle && location.pathname.match(/^\/jobs\/\d+/)) {
     pageTitle = 'Job Detail'
   }
-  pageTitle = pageTitle ?? 'Forge'
+  pageTitle = pageTitle ?? 'Forail'
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {

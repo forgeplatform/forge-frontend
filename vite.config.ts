@@ -9,8 +9,8 @@ export default defineConfig(({ command }) => ({
     {
       name: 'rename-index-html',
       closeBundle() {
-        const from = path.resolve(__dirname, 'build/forge/index.html')
-        const to = path.resolve(__dirname, 'build/forge/index_forge.html')
+        const from = path.resolve(__dirname, 'build/forail/index.html')
+        const to = path.resolve(__dirname, 'build/forail/index_forail.html')
         if (fs.existsSync(from)) {
           fs.renameSync(from, to)
         }
@@ -22,9 +22,9 @@ export default defineConfig(({ command }) => ({
       '@': path.resolve(__dirname, './src'),
     },
   },
-  base: command === 'serve' ? '/' : '/static/forge/',
+  base: command === 'serve' ? '/' : '/static/forail/',
   build: {
-    outDir: 'build/forge',
+    outDir: 'build/forail',
     emptyOutDir: true,
     rollupOptions: {
       output: {

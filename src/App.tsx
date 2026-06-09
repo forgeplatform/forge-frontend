@@ -273,7 +273,7 @@ export function App() {
   }
 
   // Force password change on first login after deployment
-  const passwordChangedKey = `forge_password_changed_${me.id}`
+  const passwordChangedKey = `forail_password_changed_${me.id}`
   const needsPasswordChange = me.is_superuser && !localStorage.getItem(passwordChangedKey)
 
   if (needsPasswordChange) {

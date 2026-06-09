@@ -1,8 +1,8 @@
-# Forge Frontend
+# Forail Frontend
 
-[![CI](https://github.com/forgeplatform/forge-frontend/actions/workflows/ci.yml/badge.svg)](https://github.com/forgeplatform/forge-frontend/actions/workflows/ci.yml)
+[![CI](https://github.com/forail-platform/forail-frontend/actions/workflows/ci.yml/badge.svg)](https://github.com/forail-platform/forail-frontend/actions/workflows/ci.yml)
 
-React UI for the Forge platform.
+React UI for the Forail platform.
 
 ## Tech Stack
 
@@ -59,7 +59,7 @@ npm run lint
 The API URL is configured via an environment variable:
 
 ```bash
-VITE_API_URL=https://forge.example.com
+VITE_API_URL=https://forail.example.com
 ```
 
 ## Documentation
@@ -69,15 +69,15 @@ VITE_API_URL=https://forge.example.com
 ## Docker
 
 ```bash
-docker build -t ghcr.io/forgeplatform/forge-frontend:latest .
+docker build -t ghcr.io/forail-platform/forail-frontend:latest .
 ```
 
 The build generates static files in `dist/` which are served via Nginx.
 
 ## Related Repositories
 
-- [forge-backend](https://github.com/forgeplatform/forge-backend) — Django API
-- [forge-devops](https://github.com/forgeplatform/forge-devops) — Docker Compose, Nginx, CI/CD
+- [forail-backend](https://github.com/forail-platform/forail-backend) — Django API
+- [forail-devops](https://github.com/forail-platform/forail-devops) — Docker Compose, Nginx, CI/CD
 
 ## License
 

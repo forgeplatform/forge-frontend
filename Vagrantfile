@@ -3,7 +3,7 @@
 
 Vagrant.configure("2") do |config|
   config.vm.box = "bento/ubuntu-24.04"
-  config.vm.hostname = "forge-frontend"
+  config.vm.hostname = "forail-frontend"
 
   # Frontend dev ports
   config.vm.network "forwarded_port", guest: 3000, host: 3000  # Vite dev server
@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
   config.vm.network "private_network", ip: "192.168.56.21"
 
   config.vm.provider "virtualbox" do |vb|
-    vb.name = "forge-frontend"
+    vb.name = "forail-frontend"
     vb.memory = "4096"
     vb.cpus = 2
   end
@@ -22,14 +22,14 @@ Vagrant.configure("2") do |config|
     lv.cpus = 2
   end
 
-  config.vm.synced_folder ".", "/forge-frontend", type: "rsync",
+  config.vm.synced_folder ".", "/forail-frontend", type: "rsync",
     rsync__exclude: [".git/", "node_modules/", "build/", "dist/", "*.pyc", "__pycache__/"]
 
   config.vm.provision "shell", inline: <<-SHELL
     set -euo pipefail
 
     echo "============================================"
-    echo " Forge Frontend - Ubuntu 24.04"
+    echo " Forail Frontend - Ubuntu 24.04"
     echo " Provisioning..."
     echo "============================================"
 
@@ -67,23 +67,23 @@ Vagrant.configure("2") do |config|
     fi
 
     # --- Workspace setup ---
-    ln -sf /forge-frontend /home/vagrant/forge-frontend
+    ln -sf /forail-frontend /home/vagrant/forail-frontend
 
     cat >> /home/vagrant/.bashrc << 'BASHRC'
 
-# Forge Frontend Environment
-export FORGE_FRONTEND=/forge-frontend
-alias forge-dev='cd /forge-frontend && npm run dev'
-alias forge-build='cd /forge-frontend && npm run build'
-alias forge-test='cd /forge-frontend && npm test'
-alias forge-lint='cd /forge-frontend && npm run lint'
+# Forail Frontend Environment
+export FORAIL_FRONTEND=/forail-frontend
+alias forail-dev='cd /forail-frontend && npm run dev'
+alias forail-build='cd /forail-frontend && npm run build'
+alias forail-test='cd /forail-frontend && npm test'
+alias forail-lint='cd /forail-frontend && npm run lint'
 BASHRC
 
     chown -R vagrant:vagrant /home/vagrant
 
     echo ""
     echo "============================================"
-    echo " Forge Frontend - Ready"
+    echo " Forail Frontend - Ready"
     echo "============================================"
     echo ""
     echo " Versions:"
@@ -93,7 +93,7 @@ BASHRC
     echo "   Docker:  $(docker --version 2>&1)"
     echo ""
     echo " Quick start (vagrant ssh):"
-    echo "   cd /forge-frontend && npm install && npm run dev"
+    echo "   cd /forail-frontend && npm install && npm run dev"
     echo ""
     echo " Access: http://192.168.56.21:3000"
     echo "============================================"

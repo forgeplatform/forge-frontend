@@ -17,6 +17,6 @@ export const useThemeStore = create<ThemeState>()(
           theme: state.theme === 'light' ? 'dark' : 'light',
         })),
     }),
-    { name: 'forge-theme' },
+    { name: 'forail-theme' },
   ),
 )

@@ -37,7 +37,7 @@ describe('EDA Types', () => {
         throttle_seconds: 30,
         last_fired_at: '2026-04-03T12:00:00Z',
         fire_count: 42,
-        webhook_url: 'https://forge.example.com/api/v2/eda_webhooks/github-deploy/',
+        webhook_url: 'https://forail.example.com/api/v2/eda_webhooks/github-deploy/',
         created: '2026-04-01T00:00:00Z',
         modified: '2026-04-03T12:00:00Z',
       }

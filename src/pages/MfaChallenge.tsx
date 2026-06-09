@@ -38,7 +38,7 @@ export function MfaChallenge() {
     <div className="flex min-h-full flex-col items-center justify-center bg-background px-4">
       <div className="mb-8 flex items-center gap-3">
         <Anvil className="h-10 w-10 text-primary" />
-        <h1 className="text-3xl font-bold tracking-tight">Forge</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Forail</h1>
       </div>
 
       <Card className="w-full max-w-sm">

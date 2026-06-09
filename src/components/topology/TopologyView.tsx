@@ -61,7 +61,7 @@ function buildGraph(instances: Instance[]): { nodes: Node[]; edges: Edge[] } {
   }
 
   // Build edges based on node_state (peer connections)
-  // Since the Forge API returns peers via separate endpoint,
+  // Since the Forail API returns peers via separate endpoint,
   // we connect control/hybrid nodes to execution nodes as a basic topology
   const controlIds = instances
     .filter((i) => i.node_type === 'control' || i.node_type === 'hybrid')

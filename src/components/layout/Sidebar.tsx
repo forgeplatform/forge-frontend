@@ -166,7 +166,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         <Link to="/" className="flex items-center gap-2 overflow-hidden">
           <Anvil className="h-7 w-7 shrink-0 text-primary" />
           {!collapsed && (
-            <span className="text-lg font-bold tracking-tight">Forge</span>
+            <span className="text-lg font-bold tracking-tight">Forail</span>
           )}
         </Link>
       </div>

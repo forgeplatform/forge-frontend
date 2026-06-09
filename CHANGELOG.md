@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to the Forge Frontend will be documented in
+All notable changes to the Forail Frontend will be documented in
 this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
@@ -23,8 +23,8 @@ and the project adheres to SemVer until the first stable release.
 - Login flow with username/password, WebAuthn / passkeys ("Sign in
   with security key"), and OIDC
 - Forced password change on first admin login (gated by localStorage
-  flag `forge_password_changed_<userId>`)
-- Floating chat widget (AssistantPanel) wired to the Forge Assistant
+  flag `forail_password_changed_<userId>`)
+- Floating chat widget (AssistantPanel) wired to the Forail Assistant
   service; context-aware (passes current page to the LLM)
 - GettingStartedWizard for org / project / inventory / credential /
   first template setup, including SSH password and private-key fields

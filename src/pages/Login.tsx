@@ -53,7 +53,7 @@ export function Login() {
 
       <div className="mb-8 flex items-center gap-3">
         <Anvil className="h-10 w-10 text-primary" />
-        <h1 className="text-3xl font-bold tracking-tight">Forge</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Forail</h1>
       </div>
 
       <Card className="w-full max-w-sm">
@@ -146,7 +146,7 @@ export function Login() {
       </Card>
 
       <p className="mt-6 text-xs text-muted-foreground">
-        Forge &mdash; Infrastructure Automation Platform
+        Forail &mdash; Infrastructure Automation Platform
       </p>
     </div>
   )

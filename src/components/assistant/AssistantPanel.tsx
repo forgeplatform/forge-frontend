@@ -26,7 +26,7 @@ function formatTime(date: Date): string {
   })
 }
 
-const WELCOME_MESSAGE = `Hi! I'm Forge Assistant, your AI helper!
+const WELCOME_MESSAGE = `Hi! I'm Forail Assistant, your AI helper!
 I'm here to help you find everything you need. Just tell me what you're looking for and I'll do my best to assist you!
 *Note: I'm an AI assistant, so I may occasionally make mistakes. Feel free to ask again if something isn't clear. Never share personal or sensitive information in the conversation.*`
 
@@ -66,7 +66,7 @@ export function AssistantPanel() {
       <button
         onClick={() => setOpen(true)}
         className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-110 active:scale-95"
-        title="Forge Assistant"
+        title="Forail Assistant"
       >
         <MessageCircle className="h-6 w-6" />
       </button>
@@ -84,7 +84,7 @@ export function AssistantPanel() {
           <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary">
             <MessageCircle className="h-3.5 w-3.5 text-primary-foreground" />
           </div>
-          <span className="text-sm font-semibold">Forge Assistant</span>
+          <span className="text-sm font-semibold">Forail Assistant</span>
           <button
             onClick={() => {}}
             className="text-muted-foreground hover:text-foreground"
@@ -132,7 +132,7 @@ export function AssistantPanel() {
             {messages.length === 0 && (
               <div className="flex flex-col items-center">
                 <div className="mb-4 text-center text-sm font-semibold text-foreground">
-                  Forge Assistant
+                  Forail Assistant
                 </div>
                 <div className="flex items-end gap-2 w-full">
                   <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary">
@@ -143,7 +143,7 @@ export function AssistantPanel() {
                       <MarkdownContent content={WELCOME_MESSAGE} />
                     </div>
                     <div className="mt-1 flex items-center justify-between px-1">
-                      <span className="text-[10px] text-muted-foreground">Forge Assistant</span>
+                      <span className="text-[10px] text-muted-foreground">Forail Assistant</span>
                       <span className="text-[10px] text-muted-foreground">{formatTime(new Date())}</span>
                     </div>
                   </div>
@@ -180,7 +180,7 @@ export function AssistantPanel() {
                   </div>
                   <div className={`mt-1 flex px-1 ${msg.role === 'user' ? 'justify-end' : 'justify-between'}`}>
                     <span className="text-[10px] text-muted-foreground">
-                      {msg.role === 'user' ? 'You' : 'Forge Assistant'}
+                      {msg.role === 'user' ? 'You' : 'Forail Assistant'}
                     </span>
                     {msg.role === 'assistant' && (
                       <span className="text-[10px] text-muted-foreground">{formatTime(new Date())}</span>
@@ -226,7 +226,7 @@ export function AssistantPanel() {
               )}
             </form>
             <div className="mt-2 text-center text-[10px] text-muted-foreground">
-              Powered by Forge Platform
+              Powered by Forail Platform
             </div>
           </div>
         </>

@@ -1,14 +1,14 @@
-# Contributing to Forge Frontend
+# Contributing to Forail Frontend
 
 Thanks for your interest in contributing!
 
-The full contributing guide — git workflow, commit conventions, coding standards, PR process — lives in the [forge-deploy repository](https://github.com/forgeplatform/forge-devops/blob/main/docs/10-contributing-guide.md). Please read it before submitting a pull request.
+The full contributing guide — git workflow, commit conventions, coding standards, PR process — lives in the [forail-deploy repository](https://github.com/forail-platform/forail-devops/blob/main/docs/10-contributing-guide.md). Please read it before submitting a pull request.
 
 ## Quick start
 
 ```bash
-git clone https://github.com/forgeplatform/forge-frontend.git
-cd forge-frontend
+git clone https://github.com/forail-platform/forail-frontend.git
+cd forail-frontend
 npm install
 npm run dev
 ```
@@ -25,6 +25,6 @@ See [README.md](./README.md) for full development setup.
 
 ## Reporting bugs
 
-Open an issue with reproduction steps, expected vs. actual behavior, and your environment (browser, Forge version, deployment method).
+Open an issue with reproduction steps, expected vs. actual behavior, and your environment (browser, Forail version, deployment method).
 
 For security vulnerabilities, see [SECURITY.md](./SECURITY.md) — please do **not** open a public issue.
