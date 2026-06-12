@@ -8,6 +8,13 @@ and the project adheres to SemVer until the first stable release.
 
 ## [Unreleased]
 
+## [2026.06.0] - 2026-06-14
+
+### Changed
+- **Renamed `forge` → `forail`** across the entire project (organization `forgeplatform` → `forail-platform`): the React app, image references (`ghcr.io/forail-platform/forail-*`), CLI, and all documentation/URLs. The GitHub organization and repositories were renamed to match.
+- Versioning unified across all platform components to CalVer `2026.06.0`.
+
+
 ## [0.1.0] - 2026-04-17
 
 ### Added
